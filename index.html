@@ -61,6 +61,26 @@
             </ul>
           </section>
           <section>
+            <a href="#tag-Facility">Facility</a>
+            <ul>
+              <li>
+                <a href="#operation--customers--customer_id--facilities-get"> GET /customers/{customer_id}/facilities </a>
+              </li>
+              <li>
+                <a href="#operation--customers--customer_id--facilities-post"> POST /customers/{customer_id}/facilities </a>
+              </li>
+              <li>
+                <a href="#operation--customers--customer_id--facilities--facility_id--get"> GET /customers/{customer_id}/facilities/{facility_id} </a>
+              </li>
+              <li>
+                <a href="#operation--customers--customer_id--facilities--facility_id--patch"> PATCH /customers/{customer_id}/facilities/{facility_id} </a>
+              </li>
+              <li>
+                <a href="#operation--customers--customer_id--facilities--facility_id--delete"> DELETE /customers/{customer_id}/facilities/{facility_id} </a>
+              </li>
+            </ul>
+          </section>
+          <section>
             <a href="#tag-CustomerState">CustomerState</a>
             <ul>
               <li>
@@ -80,10 +100,32 @@
               </li>
             </ul>
           </section>
+          <section>
+            <a href="#tag-WebHook">WebHook</a>
+            <ul>
+              <li>
+                <a href="#operation--web_hooks-get"> GET /web_hooks </a>
+              </li>
+              <li>
+                <a href="#operation--web_hooks-post"> POST /web_hooks </a>
+              </li>
+              <li>
+                <a href="#operation--web_hooks--web_hook_id--get"> GET /web_hooks/{web_hook_id} </a>
+              </li>
+              <li>
+                <a href="#operation--web_hooks--web_hook_id--patch"> PATCH /web_hooks/{web_hook_id} </a>
+              </li>
+              <li>
+                <a href="#operation--web_hooks--web_hook_id--delete"> DELETE /web_hooks/{web_hook_id} </a>
+              </li>
+            </ul>
+          </section>
           <h5>Schema Definitions</h5>
           <a href="#definition-Account"> Account </a>
           <a href="#definition-Customer"> Customer </a>
           <a href="#definition-CustomerState"> CustomerState </a>
+          <a href="#definition-Facility"> Facility </a>
+          <a href="#definition-WebHook"> WebHook </a>
         </nav>
       </div>
       <div id="docs" class="row collapse expanded drawer" data-drawer>
@@ -916,6 +958,480 @@
               <div class="doc-examples"></div>
             </div>
           </div>
+          <h1 id="tag-Facility" class="swagger-summary-tag" data-traverse-target="tag-Facility">Facility</h1>
+          <div id="operation--customers--customer_id--facilities-get" class="operation panel" data-traverse-target="operation--customers--customer_id--facilities-get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-Facility">Facility</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">GET</span>
+                <span class="operation-path">/customers/{customer_id}/facilities</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Gets <code>Facility</code> objects for a customer</p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">customer_id</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of the customer</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">integer</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">path</div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                      <div class="prop-ref">
+                        <span class="json-schema-ref-array">
+                          <a class="json-schema-ref" href="#/definitions/Facility">Facility</a>
+                        </span>
+                      </div>
+                      <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
+                    </div>
+                    <div class="prop-value">
+                      <p>Sends list of a customer&#39;s facilities</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <section>
+                  <h5>Response Example
+                    <span>(200 OK)</span>
+                  </h5>
+                  <div class="hljs"><pre><code class="lang-json">[
+  {
+    <span class="hljs-attr">&quot;bunchofkeys&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;city&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;customer_id&quot;</span>: <span class="hljs-string">&quot;integer&quot;</span>,
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;project_id&quot;</span>: <span class="hljs-string">&quot;integer&quot;</span>,
+    <span class="hljs-attr">&quot;street&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;zip&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+  }
+]
+</code></pre> </div>
+                </section>
+              </div>
+            </div>
+          </div>
+          <div id="operation--customers--customer_id--facilities-post" class="operation panel" data-traverse-target="operation--customers--customer_id--facilities-post">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-Facility">Facility</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">POST</span>
+                <span class="operation-path">/customers/{customer_id}/facilities</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Create a new <code>Facility</code></p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-body">
+                  <div class="prop-row">
+                    <div class="prop-name">
+                      <div class="swagger-request-model">
+                        <span class="">
+                          <a class="json-schema-ref" href="#/definitions/Facility">Facility</a>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value columns small-6">
+                      <!-- <div class="swagger-request-description"> -->
+                      <p>The facility JSON you want to post</p>
+                      <!-- </div> -->
+                    </div>
+                  </div>
+                </section>
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">customer_id</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of the customer</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">integer</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">path</div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <section>
+                  <h5>Request Example</h5>
+                  <div class="hljs"><pre><code class="lang-json">{
+  <span class="hljs-attr">&quot;bunchofkeys&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;city&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;customer_id&quot;</span>: <span class="hljs-string">&quot;integer&quot;</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;project_id&quot;</span>: <span class="hljs-string">&quot;integer&quot;</span>,
+  <span class="hljs-attr">&quot;street&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;zip&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+}
+</code></pre> </div>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">201 Created</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Facility was created successfully</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">422 Unprocessable Entity</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Facility creation failed</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+          </div>
+          <div id="operation--customers--customer_id--facilities--facility_id--get" class="operation panel" data-traverse-target="operation--customers--customer_id--facilities--facility_id--get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-Facility">Facility</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">GET</span>
+                <span class="operation-path">/customers/{customer_id}/facilities/{facility_id}</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Display data of an <code>Facility</code></p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">customer_id</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of the customer</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">integer</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">path</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">facility_id</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of the facility</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">integer</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">path</div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Sends the facility</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+          </div>
+          <div id="operation--customers--customer_id--facilities--facility_id--patch" class="operation panel" data-traverse-target="operation--customers--customer_id--facilities--facility_id--patch">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-Facility">Facility</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">PATCH</span>
+                <span class="operation-path">/customers/{customer_id}/facilities/{facility_id}</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Update a <code>Facility</code></p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-body">
+                  <div class="prop-row">
+                    <div class="prop-name">
+                      <div class="swagger-request-model">
+                        <span class="">
+                          <a class="json-schema-ref" href="#/definitions/Facility">Facility</a>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value columns small-6">
+                      <!-- <div class="swagger-request-description"> -->
+                      <p>The facility JSON you want to post</p>
+                      <!-- </div> -->
+                    </div>
+                  </div>
+                </section>
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">customer_id</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of the customer</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">integer</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">path</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">facility_id</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of the facility</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">integer</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">path</div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <section>
+                  <h5>Request Example</h5>
+                  <div class="hljs"><pre><code class="lang-json">{
+  <span class="hljs-attr">&quot;bunchofkeys&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;city&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;customer_id&quot;</span>: <span class="hljs-string">&quot;integer&quot;</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;project_id&quot;</span>: <span class="hljs-string">&quot;integer&quot;</span>,
+  <span class="hljs-attr">&quot;street&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;zip&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+}
+</code></pre> </div>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">204 No Content</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Facility was updated successfully</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">422 Unprocessable Entity</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Facility update failed</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+          </div>
+          <div id="operation--customers--customer_id--facilities--facility_id--delete" class="operation panel" data-traverse-target="operation--customers--customer_id--facilities--facility_id--delete">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-Facility">Facility</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">DELETE</span>
+                <span class="operation-path">/customers/{customer_id}/facilities/{facility_id}</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Delete a <code>Facility</code></p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">facility_id</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of the facility</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">integer</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">path</div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Facility was destroyed successfully</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">405 Method Not Allowed</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Facility could not be deleted</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+          </div>
           <h1 id="tag-CustomerState" class="swagger-summary-tag" data-traverse-target="tag-CustomerState">CustomerState</h1>
           <div id="operation--customer_states-get" class="operation panel" data-traverse-target="operation--customer_states-get">
             <!-- <section class="operation-tags row"> -->
@@ -1287,6 +1803,383 @@
               <div class="doc-examples"></div>
             </div>
           </div>
+          <h1 id="tag-WebHook" class="swagger-summary-tag" data-traverse-target="tag-WebHook">WebHook</h1>
+          <div id="operation--web_hooks-get" class="operation panel" data-traverse-target="operation--web_hooks-get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-WebHook">WebHook</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">GET</span>
+                <span class="operation-path">/web_hooks</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Gets <code>WebHook</code> objects</p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy"> </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                      <div class="prop-ref">
+                        <span class="json-schema-ref-array">
+                          <a class="json-schema-ref" href="#/definitions/WebHook">WebHook</a>
+                        </span>
+                      </div>
+                      <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
+                    </div>
+                    <div class="prop-value">
+                      <p>Sends list of web_hooks</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <section>
+                  <h5>Response Example
+                    <span>(200 OK)</span>
+                  </h5>
+                  <div class="hljs"><pre><code class="lang-json">[
+  {
+    <span class="hljs-attr">&quot;model&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;operation&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;uri&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+  }
+]
+</code></pre> </div>
+                </section>
+              </div>
+            </div>
+          </div>
+          <div id="operation--web_hooks-post" class="operation panel" data-traverse-target="operation--web_hooks-post">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-WebHook">WebHook</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">POST</span>
+                <span class="operation-path">/web_hooks</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Create a new <code>WebHook</code></p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-body">
+                  <div class="prop-row">
+                    <div class="prop-name">
+                      <div class="swagger-request-model">
+                        <span class="">
+                          <a class="json-schema-ref" href="#/definitions/WebHook">WebHook</a>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value columns small-6">
+                      <!-- <div class="swagger-request-description"> -->
+                      <p>The web_hook JSON you want to post</p>
+                      <!-- </div> -->
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <section>
+                  <h5>Request Example</h5>
+                  <div class="hljs"><pre><code class="lang-json">{
+  <span class="hljs-attr">&quot;model&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;operation&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;uri&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+}
+</code></pre> </div>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">201 Created</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>WebHook was created successfully</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">422 Unprocessable Entity</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>WebHook creation failed</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+          </div>
+          <div id="operation--web_hooks--web_hook_id--get" class="operation panel" data-traverse-target="operation--web_hooks--web_hook_id--get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-WebHook">WebHook</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">GET</span>
+                <span class="operation-path">/web_hooks/{web_hook_id}</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Display data of an <code>WebHook</code></p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">web_hook_id</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of the web_hook</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">integer</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">path</div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Sends the web_hook</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+          </div>
+          <div id="operation--web_hooks--web_hook_id--patch" class="operation panel" data-traverse-target="operation--web_hooks--web_hook_id--patch">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-WebHook">WebHook</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">PATCH</span>
+                <span class="operation-path">/web_hooks/{web_hook_id}</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Update a <code>WebHook</code></p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-body">
+                  <div class="prop-row">
+                    <div class="prop-name">
+                      <div class="swagger-request-model">
+                        <span class="">
+                          <a class="json-schema-ref" href="#/definitions/WebHook">WebHook</a>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value columns small-6">
+                      <!-- <div class="swagger-request-description"> -->
+                      <p>The web_hook JSON you want to post</p>
+                      <!-- </div> -->
+                    </div>
+                  </div>
+                </section>
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">web_hook_id</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of the web_hook</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">integer</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">path</div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <section>
+                  <h5>Request Example</h5>
+                  <div class="hljs"><pre><code class="lang-json">{
+  <span class="hljs-attr">&quot;model&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;operation&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;uri&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+}
+</code></pre> </div>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">204 No Content</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>WebHook was updated successfully</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">422 Unprocessable Entity</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>WebHook update failed</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+          </div>
+          <div id="operation--web_hooks--web_hook_id--delete" class="operation panel" data-traverse-target="operation--web_hooks--web_hook_id--delete">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-WebHook">WebHook</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">DELETE</span>
+                <span class="operation-path">/web_hooks/{web_hook_id}</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Delete a <code>WebHook</code></p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">web_hook_id</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of the web_hook</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">integer</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">path</div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>WebHook was destroyed successfully</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">405 Method Not Allowed</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>WebHook could not be deleted</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+          </div>
           <!-- <h1>Schema definitions</h1> -->
           <h1>Models</h1>
           <div id="definition-Account" class="panel panel-definition" data-traverse-target="definition-Account">
@@ -1426,6 +2319,106 @@
                   <dl>
                     <dt data-property-name="name">
                       <span class="json-property-name">name:</span>
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                  </dl>
+                </section>
+              </div>
+            </div>
+          </div>
+          <div id="definition-Facility" class="panel panel-definition" data-traverse-target="definition-Facility">
+            <h2 class="panel-title">
+              <a name="/definitions/Facility"></a>Facility:
+              <span class="json-property-type">
+                <span class="json-property-type">object</span>
+                <span class="json-property-range" title="Value limits"></span>
+              </span>
+            </h2>
+            <!-- <div class="doc-row">
+                  <div class="doc-copy">
+              
+                    
+                  </div>
+              
+                  <div class="doc-examples"></div>
+                </div> -->
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="json-schema-properties">
+                  <dl>
+                    <dt data-property-name="name">
+                      <span class="json-property-name">name:</span>
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dt data-property-name="street">
+                      <span class="json-property-name">street:</span>
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dt data-property-name="zip">
+                      <span class="json-property-name">zip:</span>
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dt data-property-name="city">
+                      <span class="json-property-name">city:</span>
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dt data-property-name="bunchofkeys">
+                      <span class="json-property-name">bunchofkeys:</span>
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dt data-property-name="customer_id">
+                      <span class="json-property-name">customer_id:</span>
+                      <span class="json-property-type">integer</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dt data-property-name="project_id">
+                      <span class="json-property-name">project_id:</span>
+                      <span class="json-property-type">integer</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                  </dl>
+                </section>
+              </div>
+            </div>
+          </div>
+          <div id="definition-WebHook" class="panel panel-definition" data-traverse-target="definition-WebHook">
+            <h2 class="panel-title">
+              <a name="/definitions/WebHook"></a>WebHook:
+              <span class="json-property-type">
+                <span class="json-property-type">object</span>
+                <span class="json-property-range" title="Value limits"></span>
+              </span>
+            </h2>
+            <!-- <div class="doc-row">
+                  <div class="doc-copy">
+              
+                    
+                  </div>
+              
+                  <div class="doc-examples"></div>
+                </div> -->
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="json-schema-properties">
+                  <dl>
+                    <dt data-property-name="model">
+                      <span class="json-property-name">model:</span>
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dt data-property-name="operation">
+                      <span class="json-property-name">operation:</span>
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dt data-property-name="uri">
+                      <span class="json-property-name">uri:</span>
                       <span class="json-property-type">string</span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
