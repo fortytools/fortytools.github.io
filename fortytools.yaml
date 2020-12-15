@@ -7,8 +7,8 @@ info:
   termsOfService: https://skyline-web.de/nutzungsbedingungen
   contact:
     email: support@skyline-web.de
-  version: 0.0.1
-  
+  version: 2.1.1
+
 servers:
 - url: https://skyline.fortytools.com/api/v2
 - url: https://app.fortytools.com/api/v2
@@ -99,7 +99,7 @@ paths:
                   $ref: '#/components/schemas/ClientUser'
         401:
           description: The app identified by the corresponding query parameter is not installed for any client of the user
-        403: 
+        403:
           description: Invalid credentials, there is no User with this email / password combination.
 
   /accounts:
