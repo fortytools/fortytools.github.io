@@ -70,6 +70,7 @@ paths:
       - Auth
       description: |
         Performs a login to get api credentials for an user
+      security: []
       parameters:
         - name: app
           in: query
