@@ -1,2340 +1,2609 @@
-# Example YAML to get you started quickly.
-# Be aware that YAML has indentation based scoping.
-# Code completion support is available so start typing for available options.
-swagger: '2.0'
+openapi: 3.0.1
 
-# This is your document metadata
 info:
-  version: "0.0.1"
-  title: Skyline Web API
+  title: Skyline and Fortytools Web API
   description: |
     API for https://www.skyline-web.de and https://www.fortytools.com (use app.fortytools.com instead of skyline.fortytools.com)
   termsOfService: https://skyline-web.de/nutzungsbedingungen
   contact:
     email: support@skyline-web.de
-
-basePath: /api/v2
-host: skyline-web.de
-schemes:
-  - https
-consumes:
-  - application/json
-produces:
-  - application/json
-
-securityDefinitions:
-  app:
-    type: apiKey
-    in: query
-    name: app
-    description: key of an app
-  user:
-    type: apiKey
-    in: query
-    name: user
-    description: api_key of a client_user
-  validuntil:
-    type: apiKey
-    in: query
-    name: validuntil
-    description: unix time when the generated signature will expire
-  signature:
-    type: apiKey
-    in: query
-    name: signature
-    description: |
-      the signature is used to verify both the client_user and the app
-      that are consuming the api.
-
-      the signature is computed as follows:
-
-      `sha2($client_user_api_token + ':' + $app_token + ':' + $validuntil)`
-
+  version: 0.0.1
+  
+servers:
+- url: https://skyline.fortytools.com/api/v2
+- url: https://app.fortytools.com/api/v2
 security:
-  - app: []
-    user: []
-    validuntil: []
-    signature: []
-
-
+- app: []
+  user: []
+  validuntil: []
+  signature: []
 tags:
-  - name: Account
-    description: Accounts as in Accounting
-  - name: Attachment
-    description: Attachment methods
-  - name: AttachmentType
-    description: AttachmentType methods
-  - name: Customer
-    description: Customer methods
-  - name: CustomerState
-    description: CustomerState methods
-  - name: Employee
-    description: Employee methods
-  - name: Event
-    description: Event methods
-  - name: Facility
-    description: Facility methods
-  - name: Invoice
-    description: Invoice methods
-  - name: ItemOrder
-    description: ItemOrder methods
-  - name: Item
-    description: Item methods
-  - name: ItemCategory
-    description: ItemCategory methods
-  - name: Offer
-    description: Offer methods
-  - name: Purchase
-    description: Purchase methods
-  - name: ServiceType
-    description: ServiceType methods
-  - name: StaffMember
-    description: StaffMember methods
-  - name: Supplier
-    description: Supplier methods
-  - name: Task
-    description: Task methods
-  - name: Unit
-    description: Unit methods
-  - name: Upload
-    description: Upload methods
-  - name: WebHook
-    description: WebHook methods
+- name: Account
+  description: Accounts as in Accounting
+- name: Attachment
+  description: Attachment methods
+- name: AttachmentType
+  description: AttachmentType methods
+- name: Auth
+  description: Methods to check authentication
+- name: Customer
+  description: Customer methods
+- name: CustomerState
+  description: CustomerState methods
+- name: Employee
+  description: Employee methods
+- name: Event
+  description: Event methods
+- name: Facility
+  description: Facility methods
+- name: Invoice
+  description: Invoice methods
+- name: ItemOrder
+  description: ItemOrder methods
+- name: Item
+  description: Item methods
+- name: ItemCategory
+  description: ItemCategory methods
+- name: Offer
+  description: Offer methods
+- name: Purchase
+  description: Purchase methods
+- name: ServiceType
+  description: ServiceType methods
+- name: StaffMember
+  description: StaffMember methods
+- name: Supplier
+  description: Supplier methods
+- name: Task
+  description: Task methods
+- name: Unit
+  description: Unit methods
+- name: Upload
+  description: Upload methods
+- name: WebHook
+  description: WebHook methods
 
 paths:
+  /auth/login:
+    post:
+      tags:
+      - Auth
+      description: |
+        Performs a login to get api credentials for an user
+      parameters:
+        - name: app
+          in: query
+          description: Key identifying the api app
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The account JSON you want to post
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Sends list of ClientUsers. A ClientUser is the join model of a user and a client (which is an accout for a company). The API is always used by a ClientUser and not by an User.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientUser'
+        401:
+          description: The app identified by the corresponding query parameter is not installed for any client of the user
+        403: 
+          description: Invalid credentials, there is no User with this email / password combination.
+
   /accounts:
     get:
       tags:
-        - Account
+      - Account
       description: |
         Gets `Account` objects
       responses:
         200:
           description: Sends list of accounts
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Account'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
     post:
       tags:
-        - Account
+      - Account
       description: |
         Create a new `Account`
-      parameters:
-        - name: account
-          in: body
-          description: The account JSON you want to post
-          schema:
-            $ref: '#/definitions/Account'
-          required: true
+      requestBody:
+        description: The account JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+        required: true
       responses:
         201:
           description: Account was created successfully
+          content: {}
         422:
           description: Account creation failed
-
+          content: {}
+      x-codegen-request-body-name: account
   /accounts/{account_id}:
     get:
       tags:
-        - Account
+      - Account
       description: |
         Display data of an `Account`
       parameters:
-        - name: account_id
-          in: path
+      - name: account_id
+        in: path
+        description: ID of the account
+        required: true
+        schema:
           type: integer
-          description: ID of the account
-          required: true
       responses:
         200:
           description: Sends the account
-    patch:
-      tags:
-        - Account
-      description: |
-        Update an `Account`
-      parameters:
-        - name: account_id
-          in: path
-          type: integer
-          description: ID of the account
-          required: true
-        - name: account
-          in: body
-          description: The account JSON you want to post
-          schema:
-            $ref: '#/definitions/Account'
-          required: true
-      responses:
-        204:
-          description: Account was updated successfully
-        422:
-          description: Account update failed
+          content: {}
     delete:
       tags:
-        - Account
+      - Account
       description: |
         Delete an `Account`
       parameters:
-        - name: account_id
-          in: path
+      - name: account_id
+        in: path
+        description: ID of the account
+        required: true
+        schema:
           type: integer
-          description: ID of the account
-          required: true
       responses:
         200:
           description: Account was destroyed successfully
+          content: {}
         405:
-          description: Account could not be deleted, for example because it was still associated with a ServiceType
-
+          description: Account could not be deleted, for example because it was still
+            associated with a ServiceType
+          content: {}
+    patch:
+      tags:
+      - Account
+      description: |
+        Update an `Account`
+      parameters:
+      - name: account_id
+        in: path
+        description: ID of the account
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The account JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+        required: true
+      responses:
+        204:
+          description: Account was updated successfully
+          content: {}
+        422:
+          description: Account update failed
+          content: {}
+      x-codegen-request-body-name: account
   /attachments:
-
     post:
       tags:
-        - Attachment
+      - Attachment
       description: |
         Create a new `Attachment`
-      parameters:
-        - name: attachment
-          in: body
-          description: The attachment JSON you want to post
-          schema:
-            $ref: '#/definitions/Attachment'
-          required: true
+      requestBody:
+        description: The attachment JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+        required: true
       responses:
         201:
           description: Attachment was created successfully
+          content: {}
         422:
           description: Attachment creation failed
-
+          content: {}
+      x-codegen-request-body-name: attachment
   /attachments/{attachment_id}:
     get:
       tags:
-        - Attachment
+      - Attachment
       description: |
         Display data of an `Attachment`
       parameters:
-        - name: attachment_id
-          in: path
+      - name: attachment_id
+        in: path
+        description: ID of the attachment
+        required: true
+        schema:
           type: integer
-          description: ID of the attachment
-          required: true
       responses:
         200:
           description: Sends the attachment
-    patch:
-      tags:
-        - Attachment
-      description: |
-        Update an `Attachment`
-      parameters:
-        - name: attachment_id
-          in: path
-          type: integer
-          description: ID of the attachment
-          required: true
-        - name: attachment
-          in: body
-          description: The attachment JSON you want to post
-          schema:
-            $ref: '#/definitions/Attachment'
-          required: true
-      responses:
-        204:
-          description: Attachment was updated successfully
-        422:
-          description: Attachment update failed
+          content: {}
     delete:
       tags:
-        - Attachment
+      - Attachment
       description: |
         Delete an `Attachment`
       parameters:
-        - name: attachment_id
-          in: path
+      - name: attachment_id
+        in: path
+        description: ID of the attachment
+        required: true
+        schema:
           type: integer
-          description: ID of the attachment
-          required: true
       responses:
         200:
           description: Attachment was destroyed successfully
+          content: {}
         405:
           description: Attachment could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - Attachment
+      description: |
+        Update an `Attachment`
+      parameters:
+      - name: attachment_id
+        in: path
+        description: ID of the attachment
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The attachment JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+        required: true
+      responses:
+        204:
+          description: Attachment was updated successfully
+          content: {}
+        422:
+          description: Attachment update failed
+          content: {}
+      x-codegen-request-body-name: attachment
   /attachment_types:
     get:
       tags:
-        - AttachmentType
+      - AttachmentType
       description: |
         Gets `AttachmentType` objects
       responses:
         200:
           description: Sends list of attachment_types
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/AttachmentType'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AttachmentType'
     post:
       tags:
-        - AttachmentType
+      - AttachmentType
       description: |
         Create a new `AttachmentType`
-      parameters:
-        - name: attachment_type
-          in: body
-          description: The attachment_type JSON you want to post
-          schema:
-            $ref: '#/definitions/AttachmentType'
-          required: true
+      requestBody:
+        description: The attachment_type JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttachmentType'
+        required: true
       responses:
         201:
           description: AttachmentType was created successfully
+          content: {}
         422:
           description: AttachmentType creation failed
-
+          content: {}
+      x-codegen-request-body-name: attachment_type
   /attachment_types/{attachment_type_id}:
     get:
       tags:
-        - AttachmentType
+      - AttachmentType
       description: |
         Display data of an `AttachmentType`
       parameters:
-        - name: attachment_type_id
-          in: path
+      - name: attachment_type_id
+        in: path
+        description: ID of the attachment_type
+        required: true
+        schema:
           type: integer
-          description: ID of the attachment_type
-          required: true
       responses:
         200:
           description: Sends the attachment_type
-    patch:
-      tags:
-        - AttachmentType
-      description: |
-        Update an `AttachmentType`
-      parameters:
-        - name: attachment_type_id
-          in: path
-          type: integer
-          description: ID of the attachment_type
-          required: true
-        - name: attachment_type
-          in: body
-          description: The attachment_type JSON you want to post
-          schema:
-            $ref: '#/definitions/AttachmentType'
-          required: true
-      responses:
-        204:
-          description: AttachmentType was updated successfully
-        422:
-          description: AttachmentType update failed
+          content: {}
     delete:
       tags:
-        - AttachmentType
+      - AttachmentType
       description: |
         Delete an `AttachmentType`
       parameters:
-        - name: attachment_type_id
-          in: path
+      - name: attachment_type_id
+        in: path
+        description: ID of the attachment_type
+        required: true
+        schema:
           type: integer
-          description: ID of the attachment_type
-          required: true
       responses:
         200:
           description: AttachmentType was destroyed successfully
+          content: {}
         405:
           description: AttachmentType could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - AttachmentType
+      description: |
+        Update an `AttachmentType`
+      parameters:
+      - name: attachment_type_id
+        in: path
+        description: ID of the attachment_type
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The attachment_type JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttachmentType'
+        required: true
+      responses:
+        204:
+          description: AttachmentType was updated successfully
+          content: {}
+        422:
+          description: AttachmentType update failed
+          content: {}
+      x-codegen-request-body-name: attachment_type
   /customers:
     get:
       tags:
-        - Customer
+      - Customer
       description: |
         Gets `Customer` objects
       responses:
         200:
           description: Sends list of customers
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Customer'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
     post:
       tags:
-        - Customer
+      - Customer
       description: |
         Create a new `Customer`
-      parameters:
-        - name: customer
-          in: body
-          description: The customer JSON you want to post
-          schema:
-            $ref: '#/definitions/Customer'
-          required: true
+      requestBody:
+        description: The customer JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+        required: true
       responses:
         201:
           description: Customer was created successfully
+          content: {}
         422:
           description: Customer creation failed
-
+          content: {}
+      x-codegen-request-body-name: customer
   /customers/{customer_id}:
     get:
       tags:
-        - Customer
+      - Customer
       description: |
         Display data of an `Customer`
       parameters:
-        - name: customer_id
-          in: path
+      - name: customer_id
+        in: path
+        description: ID of the customer
+        required: true
+        schema:
           type: integer
-          description: ID of the customer
-          required: true
       responses:
         200:
           description: Sends the customer
-    patch:
-      tags:
-        - Customer
-      description: |
-        Update a `Customer`
-      parameters:
-        - name: customer_id
-          in: path
-          type: integer
-          description: ID of the customer
-          required: true
-        - name: customer
-          in: body
-          description: The customer JSON you want to post
-          schema:
-            $ref: '#/definitions/Customer'
-          required: true
-      responses:
-        204:
-          description: Customer was updated successfully
-        422:
-          description: Customer update failed
+          content: {}
     delete:
       tags:
-        - Customer
+      - Customer
       description: |
         Delete a `Customer`
       parameters:
-        - name: customer_id
-          in: path
+      - name: customer_id
+        in: path
+        description: ID of the customer
+        required: true
+        schema:
           type: integer
-          description: ID of the customer
-          required: true
       responses:
         200:
           description: Customer was destroyed successfully
+          content: {}
         405:
           description: Customer could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - Customer
+      description: |
+        Update a `Customer`
+      parameters:
+      - name: customer_id
+        in: path
+        description: ID of the customer
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The customer JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+        required: true
+      responses:
+        204:
+          description: Customer was updated successfully
+          content: {}
+        422:
+          description: Customer update failed
+          content: {}
+      x-codegen-request-body-name: customer
   /customers/{customer_id}/facilities:
     get:
       tags:
-        - Facility
+      - Facility
       description: |
         Gets `Facility` objects for a customer
       parameters:
-        - name: customer_id
-          in: path
+      - name: customer_id
+        in: path
+        description: ID of the customer
+        required: true
+        schema:
           type: integer
-          description: ID of the customer
-          required: true
       responses:
         200:
           description: Sends list of a customer's facilities
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Facility'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Facility'
     post:
       tags:
-        - Facility
+      - Facility
       description: |
         Create a new `Facility`
       parameters:
-        - name: customer_id
-          in: path
+      - name: customer_id
+        in: path
+        description: ID of the customer
+        required: true
+        schema:
           type: integer
-          description: ID of the customer
-          required: true
-        - name: facility
-          in: body
-          description: The facility JSON you want to post
-          schema:
-            $ref: '#/definitions/Facility'
-          required: true
+      requestBody:
+        description: The facility JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Facility'
+        required: true
       responses:
         201:
           description: Facility was created successfully
+          content: {}
         422:
           description: Facility creation failed
-
+          content: {}
+      x-codegen-request-body-name: facility
   /customers/{customer_id}/facilities/{facility_id}:
     get:
       tags:
-        - Facility
+      - Facility
       description: |
         Display data of an `Facility`
       parameters:
-        - name: customer_id
-          in: path
+      - name: customer_id
+        in: path
+        description: ID of the customer
+        required: true
+        schema:
           type: integer
-          description: ID of the customer
-          required: true
-        - name: facility_id
-          in: path
+      - name: facility_id
+        in: path
+        description: ID of the facility
+        required: true
+        schema:
           type: integer
-          description: ID of the facility
-          required: true
       responses:
         200:
           description: Sends the facility
-    patch:
-      tags:
-        - Facility
-      description: |
-        Update a `Facility`
-      parameters:
-        - name: customer_id
-          in: path
-          type: integer
-          description: ID of the customer
-          required: true
-        - name: facility_id
-          in: path
-          type: integer
-          description: ID of the facility
-          required: true
-        - name: facility
-          in: body
-          description: The facility JSON you want to post
-          schema:
-            $ref: '#/definitions/Facility'
-          required: true
-      responses:
-        204:
-          description: Facility was updated successfully
-        422:
-          description: Facility update failed
+          content: {}
     delete:
       tags:
-        - Facility
+      - Facility
       description: |
         Delete a `Facility`
       parameters:
-        - name: customer_id
-          in: path
+      - name: customer_id
+        in: path
+        description: ID of the customer
+        required: true
+        schema:
           type: integer
-          description: ID of the customer
-          required: true
-        - name: facility_id
-          in: path
+      - name: facility_id
+        in: path
+        description: ID of the facility
+        required: true
+        schema:
           type: integer
-          description: ID of the facility
-          required: true
       responses:
         200:
           description: Facility was destroyed successfully
+          content: {}
         405:
           description: Facility could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - Facility
+      description: |
+        Update a `Facility`
+      parameters:
+      - name: customer_id
+        in: path
+        description: ID of the customer
+        required: true
+        schema:
+          type: integer
+      - name: facility_id
+        in: path
+        description: ID of the facility
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The facility JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Facility'
+        required: true
+      responses:
+        204:
+          description: Facility was updated successfully
+          content: {}
+        422:
+          description: Facility update failed
+          content: {}
+      x-codegen-request-body-name: facility
   /customer_states:
     get:
       tags:
-        - CustomerState
+      - CustomerState
       description: |
         Gets `CustomerState` objects
       responses:
         200:
           description: Sends list of customer_states
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/CustomerState'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerState'
     post:
       tags:
-        - CustomerState
+      - CustomerState
       description: |
         Create a new `CustomerState`
-      parameters:
-        - name: customer_state
-          in: body
-          description: The customer_state JSON you want to post
-          schema:
-            $ref: '#/definitions/CustomerState'
-          required: true
+      requestBody:
+        description: The customer_state JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerState'
+        required: true
       responses:
         201:
           description: CustomerState was created successfully
+          content: {}
         422:
           description: CustomerState creation failed
-
+          content: {}
+      x-codegen-request-body-name: customer_state
   /customer_states/{customer_state_id}:
     get:
       tags:
-        - CustomerState
+      - CustomerState
       description: |
         Display data of an `CustomerState`
       parameters:
-        - name: customer_state_id
-          in: path
+      - name: customer_state_id
+        in: path
+        description: ID of the customer_state
+        required: true
+        schema:
           type: integer
-          description: ID of the customer_state
-          required: true
       responses:
         200:
           description: Sends the customer_state
-    patch:
-      tags:
-        - CustomerState
-      description: |
-        Update a `CustomerState`
-      parameters:
-        - name: customer_state_id
-          in: path
-          type: integer
-          description: ID of the customer_state
-          required: true
-        - name: customer_state
-          in: body
-          description: The customer_state JSON you want to post
-          schema:
-            $ref: '#/definitions/CustomerState'
-          required: true
-      responses:
-        204:
-          description: CustomerState was updated successfully
-        422:
-          description: CustomerState update failed
+          content: {}
     delete:
       tags:
-        - CustomerState
+      - CustomerState
       description: |
         Delete a `CustomerState`
       parameters:
-        - name: customer_state_id
-          in: path
+      - name: customer_state_id
+        in: path
+        description: ID of the customer_state
+        required: true
+        schema:
           type: integer
-          description: ID of the customer_state
-          required: true
       responses:
         200:
           description: CustomerState was destroyed successfully
+          content: {}
         405:
           description: CustomerState could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - CustomerState
+      description: |
+        Update a `CustomerState`
+      parameters:
+      - name: customer_state_id
+        in: path
+        description: ID of the customer_state
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The customer_state JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerState'
+        required: true
+      responses:
+        204:
+          description: CustomerState was updated successfully
+          content: {}
+        422:
+          description: CustomerState update failed
+          content: {}
+      x-codegen-request-body-name: customer_state
   /employees:
     get:
       tags:
-        - Employee
+      - Employee
       description: |
         Gets `Employee` objects
       responses:
         200:
           description: Sends list of employees
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Employee'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
     post:
       tags:
-        - Employee
+      - Employee
       description: |
         Create a new `Employee`
-      parameters:
-        - name: employee
-          in: body
-          description: The employee JSON you want to post
-          schema:
-            $ref: '#/definitions/Employee'
-          required: true
+      requestBody:
+        description: The employee JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+        required: true
       responses:
         201:
           description: Employee was created successfully
+          content: {}
         422:
           description: Employee creation failed
-
+          content: {}
+      x-codegen-request-body-name: employee
   /employees/{employee_id}:
     get:
       tags:
-        - Employee
+      - Employee
       description: |
         Display data of an `Employee`
       parameters:
-        - name: employee_id
-          in: path
+      - name: employee_id
+        in: path
+        description: ID of the employee
+        required: true
+        schema:
           type: integer
-          description: ID of the employee
-          required: true
       responses:
         200:
           description: Sends the employee
-    patch:
-      tags:
-        - Employee
-      description: |
-        Update a `Employee`
-      parameters:
-        - name: employee_id
-          in: path
-          type: integer
-          description: ID of the employee
-          required: true
-        - name: employee
-          in: body
-          description: The employee JSON you want to post
-          schema:
-            $ref: '#/definitions/Employee'
-          required: true
-      responses:
-        204:
-          description: Employee was updated successfully
-        422:
-          description: Employee update failed
+          content: {}
     delete:
       tags:
-        - Employee
+      - Employee
       description: |
         Delete a `Employee`
       parameters:
-        - name: employee_id
-          in: path
+      - name: employee_id
+        in: path
+        description: ID of the employee
+        required: true
+        schema:
           type: integer
-          description: ID of the employee
-          required: true
       responses:
         200:
           description: Employee was destroyed successfully
+          content: {}
         405:
           description: Employee could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - Employee
+      description: |
+        Update a `Employee`
+      parameters:
+      - name: employee_id
+        in: path
+        description: ID of the employee
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The employee JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+        required: true
+      responses:
+        204:
+          description: Employee was updated successfully
+          content: {}
+        422:
+          description: Employee update failed
+          content: {}
+      x-codegen-request-body-name: employee
   /events:
     get:
       tags:
-        - Event
+      - Event
       description: |
         Gets `Event` objects
       responses:
         200:
           description: Sends list of events
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Event'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
     post:
       tags:
-        - Event
+      - Event
       description: |
         Create a new `Event`
-      parameters:
-        - name: event
-          in: body
-          description: The event JSON you want to post
-          schema:
-            $ref: '#/definitions/Event'
-          required: true
+      requestBody:
+        description: The event JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+        required: true
       responses:
         201:
           description: Event was created successfully
+          content: {}
         422:
           description: Event creation failed
-
+          content: {}
+      x-codegen-request-body-name: event
   /events/{event_id}:
     get:
       tags:
-        - Event
+      - Event
       description: |
         Display data of an `Event`
       parameters:
-        - name: event_id
-          in: path
+      - name: event_id
+        in: path
+        description: ID of the event
+        required: true
+        schema:
           type: integer
-          description: ID of the event
-          required: true
       responses:
         200:
           description: Sends the event
-    patch:
-      tags:
-        - Event
-      description: |
-        Update a `Event`
-      parameters:
-        - name: event_id
-          in: path
-          type: integer
-          description: ID of the event
-          required: true
-        - name: event
-          in: body
-          description: The event JSON you want to post
-          schema:
-            $ref: '#/definitions/Event'
-          required: true
-      responses:
-        204:
-          description: Event was updated successfully
-        422:
-          description: Event update failed
+          content: {}
     delete:
       tags:
-        - Event
+      - Event
       description: |
         Delete a `Event`
       parameters:
-        - name: event_id
-          in: path
+      - name: event_id
+        in: path
+        description: ID of the event
+        required: true
+        schema:
           type: integer
-          description: ID of the event
-          required: true
       responses:
         200:
           description: Event was destroyed successfully
+          content: {}
         405:
           description: Event could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - Event
+      description: |
+        Update a `Event`
+      parameters:
+      - name: event_id
+        in: path
+        description: ID of the event
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The event JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+        required: true
+      responses:
+        204:
+          description: Event was updated successfully
+          content: {}
+        422:
+          description: Event update failed
+          content: {}
+      x-codegen-request-body-name: event
   /invoices:
     get:
       tags:
-        - Invoice
+      - Invoice
       description: |
         Gets `Invoice` objects
       responses:
         200:
           description: Sends list of invoices
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Invoice'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invoice'
     post:
       tags:
-        - Invoice
+      - Invoice
       description: |
         Create a new `Invoice`
-      parameters:
-        - name: invoice
-          in: body
-          description: The invoice JSON you want to post
-          schema:
-            $ref: '#/definitions/Invoice'
-          required: true
+      requestBody:
+        description: The invoice JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+        required: true
       responses:
         201:
           description: Invoice was created successfully
+          content: {}
         422:
           description: Invoice creation failed
-
+          content: {}
+      x-codegen-request-body-name: invoice
   /invoices/{invoice_id}:
     get:
       tags:
-        - Invoice
+      - Invoice
       description: |
         Display data of an `Invoice`
       parameters:
-        - name: invoice_id
-          in: path
+      - name: invoice_id
+        in: path
+        description: ID of the invoice
+        required: true
+        schema:
           type: integer
-          description: ID of the invoice
-          required: true
       responses:
         200:
           description: Sends the invoice
-    patch:
-      tags:
-        - Invoice
-      description: |
-        Update a `Invoice`
-      parameters:
-        - name: invoice_id
-          in: path
-          type: integer
-          description: ID of the invoice
-          required: true
-        - name: invoice
-          in: body
-          description: The invoice JSON you want to post
-          schema:
-            $ref: '#/definitions/Invoice'
-          required: true
-      responses:
-        204:
-          description: Invoice was updated successfully
-        422:
-          description: Invoice update failed
+          content: {}
     delete:
       tags:
-        - Invoice
+      - Invoice
       description: |
         Delete a `Invoice`
       parameters:
-        - name: invoice_id
-          in: path
+      - name: invoice_id
+        in: path
+        description: ID of the invoice
+        required: true
+        schema:
           type: integer
-          description: ID of the invoice
-          required: true
       responses:
         200:
           description: Invoice was destroyed successfully
+          content: {}
         405:
           description: Invoice could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - Invoice
+      description: |
+        Update a `Invoice`
+      parameters:
+      - name: invoice_id
+        in: path
+        description: ID of the invoice
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The invoice JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+        required: true
+      responses:
+        204:
+          description: Invoice was updated successfully
+          content: {}
+        422:
+          description: Invoice update failed
+          content: {}
+      x-codegen-request-body-name: invoice
   /invoices/{invoice_id}/cancel:
     post:
       tags:
-        - Invoice
+      - Invoice
       description: |
         Cancel an `Invoice` (meaning that an `InvoiceCorrection` is generated which will annulate the `Invoice`)
       parameters:
-        - name: invoice_id
-          in: path
+      - name: invoice_id
+        in: path
+        description: ID of the invoice
+        required: true
+        schema:
           type: integer
-          description: ID of the invoice
-          required: true
       responses:
         200:
-          description: Invoice was canceled successfully and InvoiceCorrection draft has been created
+          description: Invoice was canceled successfully and InvoiceCorrection draft
+            has been created
+          content: {}
         422:
           description: Invoice cancelation failed
-
+          content: {}
   /invoices/{invoice_id}/print:
     post:
       tags:
-        - Invoice
+      - Invoice
       description: |
         Print an `Invoice` (meaning that it leaves the draft state, a number is automatically assigned and the final invoice pdf is generated)
       parameters:
-        - name: invoice_id
-          in: path
+      - name: invoice_id
+        in: path
+        description: ID of the invoice
+        required: true
+        schema:
           type: integer
-          description: ID of the invoice
-          required: true
       responses:
         200:
           description: Invoice was printed successfully
+          content: {}
         422:
           description: Invoice could not be printed
-
+          content: {}
   /item_orders:
     get:
       tags:
-        - ItemOrder
+      - ItemOrder
       description: |
         Gets `ItemOrder` objects
       responses:
         200:
           description: Sends list of item_orders
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/ItemOrder'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemOrder'
     post:
       tags:
-        - ItemOrder
+      - ItemOrder
       description: |
         Create a new `ItemOrder`
-      parameters:
-        - name: item_order
-          in: body
-          description: The item_order JSON you want to post
-          schema:
-            $ref: '#/definitions/ItemOrder'
-          required: true
+      requestBody:
+        description: The item_order JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemOrder'
+        required: true
       responses:
         201:
           description: ItemOrder was created successfully
+          content: {}
         422:
           description: ItemOrder creation failed
-
+          content: {}
+      x-codegen-request-body-name: item_order
   /item_orders/{item_order_id}:
     get:
       tags:
-        - ItemOrder
+      - ItemOrder
       description: |
         Display data of an `ItemOrder`
       parameters:
-        - name: item_order_id
-          in: path
+      - name: item_order_id
+        in: path
+        description: ID of the item_order
+        required: true
+        schema:
           type: integer
-          description: ID of the item_order
-          required: true
       responses:
         200:
           description: Sends the item_order
-    patch:
-      tags:
-        - ItemOrder
-      description: |
-        Update a `ItemOrder`
-      parameters:
-        - name: item_order_id
-          in: path
-          type: integer
-          description: ID of the item_order
-          required: true
-        - name: item_order
-          in: body
-          description: The item_order JSON you want to post
-          schema:
-            $ref: '#/definitions/ItemOrder'
-          required: true
-      responses:
-        204:
-          description: ItemOrder was updated successfully
-        422:
-          description: ItemOrder update failed
+          content: {}
     delete:
       tags:
-        - ItemOrder
+      - ItemOrder
       description: |
         Delete a `ItemOrder`
       parameters:
-        - name: item_order_id
-          in: path
+      - name: item_order_id
+        in: path
+        description: ID of the item_order
+        required: true
+        schema:
           type: integer
-          description: ID of the item_order
-          required: true
       responses:
         200:
           description: ItemOrder was destroyed successfully
+          content: {}
         405:
           description: ItemOrder could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - ItemOrder
+      description: |
+        Update a `ItemOrder`
+      parameters:
+      - name: item_order_id
+        in: path
+        description: ID of the item_order
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The item_order JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemOrder'
+        required: true
+      responses:
+        204:
+          description: ItemOrder was updated successfully
+          content: {}
+        422:
+          description: ItemOrder update failed
+          content: {}
+      x-codegen-request-body-name: item_order
   /item_orders/{item_order_id}/print:
     post:
       tags:
-        - ItemOrder
+      - ItemOrder
       description: |
         Print an `ItemOrder` (meaning that a number is automatically assigned and the final ItemOrder pdf is generated)
       parameters:
-        - name: item_order_id
-          in: path
+      - name: item_order_id
+        in: path
+        description: ID of the ItemOrder
+        required: true
+        schema:
           type: integer
-          description: ID of the ItemOrder
-          required: true
       responses:
         200:
           description: ItemOrder was printed successfully
+          content: {}
         422:
           description: ItemOrder could not be printed
-
+          content: {}
   /items:
     get:
       tags:
-        - Item
+      - Item
       description: |
         Gets `Item` objects
       responses:
         200:
           description: Sends list of items
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Item'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
     post:
       tags:
-        - Item
+      - Item
       description: |
         Create a new `Item`
-      parameters:
-        - name: item
-          in: body
-          description: The item JSON you want to post
-          schema:
-            $ref: '#/definitions/Item'
-          required: true
+      requestBody:
+        description: The item JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+        required: true
       responses:
         201:
           description: Item was created successfully
+          content: {}
         422:
           description: Item creation failed
-
+          content: {}
+      x-codegen-request-body-name: item
   /items/{item_id}:
     get:
       tags:
-        - Item
+      - Item
       description: |
         Display data of an `Item`
       parameters:
-        - name: item_id
-          in: path
+      - name: item_id
+        in: path
+        description: ID of the item
+        required: true
+        schema:
           type: integer
-          description: ID of the item
-          required: true
       responses:
         200:
           description: Sends the item
-    patch:
-      tags:
-        - Item
-      description: |
-        Update a `Item`
-      parameters:
-        - name: item_id
-          in: path
-          type: integer
-          description: ID of the item
-          required: true
-        - name: item
-          in: body
-          description: The item JSON you want to post
-          schema:
-            $ref: '#/definitions/Item'
-          required: true
-      responses:
-        204:
-          description: Item was updated successfully
-        422:
-          description: Item update failed
+          content: {}
     delete:
       tags:
-        - Item
+      - Item
       description: |
         Delete a `Item`
       parameters:
-        - name: item_id
-          in: path
+      - name: item_id
+        in: path
+        description: ID of the item
+        required: true
+        schema:
           type: integer
-          description: ID of the item
-          required: true
       responses:
         200:
           description: Item was destroyed successfully
+          content: {}
         405:
           description: Item could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - Item
+      description: |
+        Update a `Item`
+      parameters:
+      - name: item_id
+        in: path
+        description: ID of the item
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The item JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+        required: true
+      responses:
+        204:
+          description: Item was updated successfully
+          content: {}
+        422:
+          description: Item update failed
+          content: {}
+      x-codegen-request-body-name: item
   /item_categories:
     get:
       tags:
-        - ItemCategory
+      - ItemCategory
       description: |
         Gets `ItemCategory` objects
       responses:
         200:
           description: Sends list of item_categories
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/ItemCategory'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemCategory'
     post:
       tags:
-        - ItemCategory
+      - ItemCategory
       description: |
         Create a new `ItemCategory`
-      parameters:
-        - name: item_category
-          in: body
-          description: The item_category JSON you want to post
-          schema:
-            $ref: '#/definitions/ItemCategory'
-          required: true
+      requestBody:
+        description: The item_category JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemCategory'
+        required: true
       responses:
         201:
           description: ItemCategory was created successfully
+          content: {}
         422:
           description: ItemCategory creation failed
-
+          content: {}
+      x-codegen-request-body-name: item_category
   /item_categories/{item_category_id}:
     get:
       tags:
-        - ItemCategory
+      - ItemCategory
       description: |
         Display data of an `ItemCategory`
       parameters:
-        - name: item_category_id
-          in: path
+      - name: item_category_id
+        in: path
+        description: ID of the item_category
+        required: true
+        schema:
           type: integer
-          description: ID of the item_category
-          required: true
       responses:
         200:
           description: Sends the item_category
-    patch:
-      tags:
-        - ItemCategory
-      description: |
-        Update a `ItemCategory`
-      parameters:
-        - name: item_category_id
-          in: path
-          type: integer
-          description: ID of the item_category
-          required: true
-        - name: item_category
-          in: body
-          description: The item_category JSON you want to post
-          schema:
-            $ref: '#/definitions/ItemCategory'
-          required: true
-      responses:
-        204:
-          description: ItemCategory was updated successfully
-        422:
-          description: ItemCategory update failed
+          content: {}
     delete:
       tags:
-        - ItemCategory
+      - ItemCategory
       description: |
         Delete a `ItemCategory`
       parameters:
-        - name: item_category_id
-          in: path
+      - name: item_category_id
+        in: path
+        description: ID of the item_category
+        required: true
+        schema:
           type: integer
-          description: ID of the item_category
-          required: true
       responses:
         200:
           description: ItemCategory was destroyed successfully
+          content: {}
         405:
           description: ItemCategory could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - ItemCategory
+      description: |
+        Update a `ItemCategory`
+      parameters:
+      - name: item_category_id
+        in: path
+        description: ID of the item_category
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The item_category JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemCategory'
+        required: true
+      responses:
+        204:
+          description: ItemCategory was updated successfully
+          content: {}
+        422:
+          description: ItemCategory update failed
+          content: {}
+      x-codegen-request-body-name: item_category
   /offers:
     get:
       tags:
-        - Offer
+      - Offer
       description: |
         Gets `Offer` objects
       responses:
         200:
           description: Sends list of offers
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Offer'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Offer'
     post:
       tags:
-        - Offer
+      - Offer
       description: |
         Create a new `Offer`
-      parameters:
-        - name: offer
-          in: body
-          description: The offer JSON you want to post
-          schema:
-            $ref: '#/definitions/Offer'
-          required: true
+      requestBody:
+        description: The offer JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Offer'
+        required: true
       responses:
         201:
           description: Offer was created successfully
+          content: {}
         422:
           description: Offer creation failed
-
+          content: {}
+      x-codegen-request-body-name: offer
   /offers/{offer_id}:
     get:
       tags:
-        - Offer
+      - Offer
       description: |
         Display data of an `Offer`
       parameters:
-        - name: offer_id
-          in: path
+      - name: offer_id
+        in: path
+        description: ID of the offer
+        required: true
+        schema:
           type: integer
-          description: ID of the offer
-          required: true
       responses:
         200:
           description: Sends the offer
-    patch:
-      tags:
-        - Offer
-      description: |
-        Update a `Offer`
-      parameters:
-        - name: offer_id
-          in: path
-          type: integer
-          description: ID of the offer
-          required: true
-        - name: offer
-          in: body
-          description: The offer JSON you want to post
-          schema:
-            $ref: '#/definitions/Offer'
-          required: true
-      responses:
-        204:
-          description: Offer was updated successfully
-        422:
-          description: Offer update failed
+          content: {}
     delete:
       tags:
-        - Offer
+      - Offer
       description: |
         Delete a `Offer`
       parameters:
-        - name: offer_id
-          in: path
+      - name: offer_id
+        in: path
+        description: ID of the offer
+        required: true
+        schema:
           type: integer
-          description: ID of the offer
-          required: true
       responses:
         200:
           description: Offer was destroyed successfully
+          content: {}
         405:
           description: Offer could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - Offer
+      description: |
+        Update a `Offer`
+      parameters:
+      - name: offer_id
+        in: path
+        description: ID of the offer
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The offer JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Offer'
+        required: true
+      responses:
+        204:
+          description: Offer was updated successfully
+          content: {}
+        422:
+          description: Offer update failed
+          content: {}
+      x-codegen-request-body-name: offer
   /offers/{offer_id}/print:
     post:
       tags:
-        - Offer
+      - Offer
       description: |
         Print an `Offer` (meaning that a number is automatically assigned and the final Offer pdf is generated)
       parameters:
-        - name: offer_id
-          in: path
+      - name: offer_id
+        in: path
+        description: ID of the Offer
+        required: true
+        schema:
           type: integer
-          description: ID of the Offer
-          required: true
       responses:
         200:
           description: Offer was printed successfully
+          content: {}
         422:
           description: Offer could not be printed
-
+          content: {}
   /purchases:
     get:
       tags:
-        - Purchase
+      - Purchase
       description: |
         Gets `Purchase` objects
       responses:
         200:
           description: Sends list of purchases
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Purchase'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Purchase'
     post:
       tags:
-        - Purchase
+      - Purchase
       description: |
         Create a new `Purchase`
-      parameters:
-        - name: purchase
-          in: body
-          description: The purchase JSON you want to post
-          schema:
-            $ref: '#/definitions/Purchase'
-          required: true
+      requestBody:
+        description: The purchase JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Purchase'
+        required: true
       responses:
         201:
           description: Purchase was created successfully
+          content: {}
         422:
           description: Purchase creation failed
-
+          content: {}
+      x-codegen-request-body-name: purchase
   /purchases/{purchase_id}:
     get:
       tags:
-        - Purchase
+      - Purchase
       description: |
         Display data of an `Purchase`
       parameters:
-        - name: purchase_id
-          in: path
+      - name: purchase_id
+        in: path
+        description: ID of the purchase
+        required: true
+        schema:
           type: integer
-          description: ID of the purchase
-          required: true
       responses:
         200:
           description: Sends the purchase
-    patch:
-      tags:
-        - Purchase
-      description: |
-        Update a `Purchase`
-      parameters:
-        - name: purchase_id
-          in: path
-          type: integer
-          description: ID of the purchase
-          required: true
-        - name: purchase
-          in: body
-          description: The purchase JSON you want to post
-          schema:
-            $ref: '#/definitions/Purchase'
-          required: true
-      responses:
-        204:
-          description: Purchase was updated successfully
-        422:
-          description: Purchase update failed
+          content: {}
     delete:
       tags:
-        - Purchase
+      - Purchase
       description: |
         Delete a `Purchase`
       parameters:
-        - name: purchase_id
-          in: path
+      - name: purchase_id
+        in: path
+        description: ID of the purchase
+        required: true
+        schema:
           type: integer
-          description: ID of the purchase
-          required: true
       responses:
         200:
           description: Purchase was destroyed successfully
+          content: {}
         405:
           description: Purchase could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - Purchase
+      description: |
+        Update a `Purchase`
+      parameters:
+      - name: purchase_id
+        in: path
+        description: ID of the purchase
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The purchase JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Purchase'
+        required: true
+      responses:
+        204:
+          description: Purchase was updated successfully
+          content: {}
+        422:
+          description: Purchase update failed
+          content: {}
+      x-codegen-request-body-name: purchase
   /service_types:
     get:
       tags:
-        - ServiceType
+      - ServiceType
       description: |
         Gets `ServiceType` objects
       responses:
         200:
           description: Sends list of service_types
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/ServiceType'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceType'
     post:
       tags:
-        - ServiceType
+      - ServiceType
       description: |
         Create a new `ServiceType`
-      parameters:
-        - name: service_type
-          in: body
-          description: The service_type JSON you want to post
-          schema:
-            $ref: '#/definitions/ServiceType'
-          required: true
+      requestBody:
+        description: The service_type JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceType'
+        required: true
       responses:
         201:
           description: ServiceType was created successfully
+          content: {}
         422:
           description: ServiceType creation failed
-
+          content: {}
+      x-codegen-request-body-name: service_type
   /service_types/{service_type_id}:
     get:
       tags:
-        - ServiceType
+      - ServiceType
       description: |
         Display data of an `ServiceType`
       parameters:
-        - name: service_type_id
-          in: path
+      - name: service_type_id
+        in: path
+        description: ID of the service_type
+        required: true
+        schema:
           type: integer
-          description: ID of the service_type
-          required: true
       responses:
         200:
           description: Sends the service_type
-    patch:
-      tags:
-        - ServiceType
-      description: |
-        Update a `ServiceType`
-      parameters:
-        - name: service_type_id
-          in: path
-          type: integer
-          description: ID of the service_type
-          required: true
-        - name: service_type
-          in: body
-          description: The service_type JSON you want to post
-          schema:
-            $ref: '#/definitions/ServiceType'
-          required: true
-      responses:
-        204:
-          description: ServiceType was updated successfully
-        422:
-          description: ServiceType update failed
+          content: {}
     delete:
       tags:
-        - ServiceType
+      - ServiceType
       description: |
         Delete a `ServiceType`
       parameters:
-        - name: service_type_id
-          in: path
+      - name: service_type_id
+        in: path
+        description: ID of the service_type
+        required: true
+        schema:
           type: integer
-          description: ID of the service_type
-          required: true
       responses:
         200:
           description: ServiceType was destroyed successfully
+          content: {}
         405:
           description: ServiceType could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - ServiceType
+      description: |
+        Update a `ServiceType`
+      parameters:
+      - name: service_type_id
+        in: path
+        description: ID of the service_type
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The service_type JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceType'
+        required: true
+      responses:
+        204:
+          description: ServiceType was updated successfully
+          content: {}
+        422:
+          description: ServiceType update failed
+          content: {}
+      x-codegen-request-body-name: service_type
   /staff_members:
     get:
       tags:
-        - StaffMember
+      - StaffMember
       description: |
         Gets `StaffMember` objects
       responses:
         200:
           description: Sends list of staff_members
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/StaffMember'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StaffMember'
   /staff_members/{staff_member_id}:
     get:
       tags:
-        - StaffMember
+      - StaffMember
       description: |
         Display data of an `StaffMember`
       parameters:
-        - name: staff_member_id
-          in: path
+      - name: staff_member_id
+        in: path
+        description: ID of the staff_member
+        required: true
+        schema:
           type: integer
-          description: ID of the staff_member
-          required: true
       responses:
         200:
           description: Sends the staff_member
-
+          content: {}
   /suppliers:
     get:
       tags:
-        - Supplier
+      - Supplier
       description: |
         Gets `Supplier` objects
       responses:
         200:
           description: Sends list of suppliers
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Supplier'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Supplier'
     post:
       tags:
-        - Supplier
+      - Supplier
       description: |
         Create a new `Supplier`
-      parameters:
-        - name: supplier
-          in: body
-          description: The supplier JSON you want to post
-          schema:
-            $ref: '#/definitions/Supplier'
-          required: true
+      requestBody:
+        description: The supplier JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Supplier'
+        required: true
       responses:
         201:
           description: Supplier was created successfully
+          content: {}
         422:
           description: Supplier creation failed
-
+          content: {}
+      x-codegen-request-body-name: supplier
   /suppliers/{supplier_id}:
     get:
       tags:
-        - Supplier
+      - Supplier
       description: |
         Display data of an `Supplier`
       parameters:
-        - name: supplier_id
-          in: path
+      - name: supplier_id
+        in: path
+        description: ID of the supplier
+        required: true
+        schema:
           type: integer
-          description: ID of the supplier
-          required: true
       responses:
         200:
           description: Sends the supplier
-    patch:
-      tags:
-        - Supplier
-      description: |
-        Update a `Supplier`
-      parameters:
-        - name: supplier_id
-          in: path
-          type: integer
-          description: ID of the supplier
-          required: true
-        - name: supplier
-          in: body
-          description: The supplier JSON you want to post
-          schema:
-            $ref: '#/definitions/Supplier'
-          required: true
-      responses:
-        204:
-          description: Supplier was updated successfully
-        422:
-          description: Supplier update failed
+          content: {}
     delete:
       tags:
-        - Supplier
+      - Supplier
       description: |
         Delete a `Supplier`
       parameters:
-        - name: supplier_id
-          in: path
+      - name: supplier_id
+        in: path
+        description: ID of the supplier
+        required: true
+        schema:
           type: integer
-          description: ID of the supplier
-          required: true
       responses:
         200:
           description: Supplier was destroyed successfully
+          content: {}
         405:
           description: Supplier could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - Supplier
+      description: |
+        Update a `Supplier`
+      parameters:
+      - name: supplier_id
+        in: path
+        description: ID of the supplier
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The supplier JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Supplier'
+        required: true
+      responses:
+        204:
+          description: Supplier was updated successfully
+          content: {}
+        422:
+          description: Supplier update failed
+          content: {}
+      x-codegen-request-body-name: supplier
   /tasks:
     get:
       tags:
-        - Task
+      - Task
       description: |
         Gets `Task` objects
       responses:
         200:
           description: Sends list of tasks
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Task'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
     post:
       tags:
-        - Task
+      - Task
       description: |
         Create a new `Task`
-      parameters:
-        - name: task
-          in: body
-          description: The task JSON you want to post
-          schema:
-            $ref: '#/definitions/Task'
-          required: true
+      requestBody:
+        description: The task JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+        required: true
       responses:
         201:
           description: Task was created successfully
+          content: {}
         422:
           description: Task creation failed
-
+          content: {}
+      x-codegen-request-body-name: task
   /tasks/{task_id}:
     get:
       tags:
-        - Task
+      - Task
       description: |
         Display data of an `Task`
       parameters:
-        - name: task_id
-          in: path
+      - name: task_id
+        in: path
+        description: ID of the task
+        required: true
+        schema:
           type: integer
-          description: ID of the task
-          required: true
       responses:
         200:
           description: Sends the task
-    patch:
-      tags:
-        - Task
-      description: |
-        Update a `Task`
-      parameters:
-        - name: task_id
-          in: path
-          type: integer
-          description: ID of the task
-          required: true
-        - name: task
-          in: body
-          description: The task JSON you want to post
-          schema:
-            $ref: '#/definitions/Task'
-          required: true
-      responses:
-        204:
-          description: Task was updated successfully
-        422:
-          description: Task update failed
+          content: {}
     delete:
       tags:
-        - Task
+      - Task
       description: |
         Delete a `Task`
       parameters:
-        - name: task_id
-          in: path
+      - name: task_id
+        in: path
+        description: ID of the task
+        required: true
+        schema:
           type: integer
-          description: ID of the task
-          required: true
       responses:
         200:
           description: Task was destroyed successfully
+          content: {}
         405:
           description: Task could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - Task
+      description: |
+        Update a `Task`
+      parameters:
+      - name: task_id
+        in: path
+        description: ID of the task
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The task JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+        required: true
+      responses:
+        204:
+          description: Task was updated successfully
+          content: {}
+        422:
+          description: Task update failed
+          content: {}
+      x-codegen-request-body-name: task
   /units:
     get:
       tags:
-        - Unit
+      - Unit
       description: |
         Gets `Unit` objects
       responses:
         200:
           description: Sends list of units
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Unit'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Unit'
     post:
       tags:
-        - Unit
+      - Unit
       description: |
         Create a new `Unit`
-      parameters:
-        - name: unit
-          in: body
-          description: The unit JSON you want to post
-          schema:
-            $ref: '#/definitions/Unit'
-          required: true
+      requestBody:
+        description: The unit JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Unit'
+        required: true
       responses:
         201:
           description: Unit was created successfully
+          content: {}
         422:
           description: Unit creation failed
-
+          content: {}
+      x-codegen-request-body-name: unit
   /units/{unit_id}:
     get:
       tags:
-        - Unit
+      - Unit
       description: |
         Display data of an `Unit`
       parameters:
-        - name: unit_id
-          in: path
+      - name: unit_id
+        in: path
+        description: ID of the unit
+        required: true
+        schema:
           type: integer
-          description: ID of the unit
-          required: true
       responses:
         200:
           description: Sends the unit
-    patch:
-      tags:
-        - Unit
-      description: |
-        Update a `Unit`
-      parameters:
-        - name: unit_id
-          in: path
-          type: integer
-          description: ID of the unit
-          required: true
-        - name: unit
-          in: body
-          description: The unit JSON you want to post
-          schema:
-            $ref: '#/definitions/Unit'
-          required: true
-      responses:
-        204:
-          description: Unit was updated successfully
-        422:
-          description: Unit update failed
+          content: {}
     delete:
       tags:
-        - Unit
+      - Unit
       description: |
         Delete a `Unit`
       parameters:
-        - name: unit_id
-          in: path
+      - name: unit_id
+        in: path
+        description: ID of the unit
+        required: true
+        schema:
           type: integer
-          description: ID of the unit
-          required: true
       responses:
         200:
           description: Unit was destroyed successfully
+          content: {}
         405:
           description: Unit could not be deleted
-
+          content: {}
+    patch:
+      tags:
+      - Unit
+      description: |
+        Update a `Unit`
+      parameters:
+      - name: unit_id
+        in: path
+        description: ID of the unit
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The unit JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Unit'
+        required: true
+      responses:
+        204:
+          description: Unit was updated successfully
+          content: {}
+        422:
+          description: Unit update failed
+          content: {}
+      x-codegen-request-body-name: unit
   /web_hooks:
     get:
       tags:
-        - WebHook
+      - WebHook
       description: |
         Gets `WebHook` objects
       responses:
         200:
           description: Sends list of web_hooks
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/WebHook'
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WebHook'
     post:
       tags:
-        - WebHook
+      - WebHook
       description: |
         Create a new `WebHook`
-      parameters:
-        - name: web_hook
-          in: body
-          description: The web_hook JSON you want to post
-          schema:
-            $ref: '#/definitions/WebHook'
-          required: true
+      requestBody:
+        description: The web_hook JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebHook'
+        required: true
       responses:
         201:
           description: WebHook was created successfully
+          content: {}
         422:
           description: WebHook creation failed
-
+          content: {}
+      x-codegen-request-body-name: web_hook
   /web_hooks/{web_hook_id}:
     get:
       tags:
-        - WebHook
+      - WebHook
       description: |
         Display data of an `WebHook`
       parameters:
-        - name: web_hook_id
-          in: path
+      - name: web_hook_id
+        in: path
+        description: ID of the web_hook
+        required: true
+        schema:
           type: integer
-          description: ID of the web_hook
-          required: true
       responses:
         200:
           description: Sends the web_hook
-    patch:
-      tags:
-        - WebHook
-      description: |
-        Update a `WebHook`
-      parameters:
-        - name: web_hook_id
-          in: path
-          type: integer
-          description: ID of the web_hook
-          required: true
-        - name: web_hook
-          in: body
-          description: The web_hook JSON you want to post
-          schema:
-            $ref: '#/definitions/WebHook'
-          required: true
-      responses:
-        204:
-          description: WebHook was updated successfully
-        422:
-          description: WebHook update failed
+          content: {}
     delete:
       tags:
-        - WebHook
+      - WebHook
       description: |
         Delete a `WebHook`
       parameters:
-        - name: web_hook_id
-          in: path
+      - name: web_hook_id
+        in: path
+        description: ID of the web_hook
+        required: true
+        schema:
           type: integer
-          description: ID of the web_hook
-          required: true
       responses:
         200:
           description: WebHook was destroyed successfully
+          content: {}
         405:
           description: WebHook could not be deleted
-
-
-definitions:
-
-  Account:
-    type: object
-    properties:
-      number:
-        type: integer
-      name:
-        type: string
-      vat:
-        type: integer
-
-  Attachment:
-    type: object
-    properties:
-      filename:
-        type: string
-      attachable_type:
-        type: string
-      attachable_id:
-        type: integer
-      attachment_type_id:
-        type: integer
-      upload:
-        type: string
-
-  AttachmentType:
-    type: object
-    properties:
-      name:
-        type: string
-
-  Customer:
-    type: object
-    properties:
-      number:
-        type: integer
-      shortname:
-        type: string
-      name:
-        type: string
-      street:
-        type: string
-      zip:
-        type: string
-      city:
-        type: string
-      shortinfo:
-        type: string
-      tag_list:
-        type: array
-        items:
+          content: {}
+    patch:
+      tags:
+      - WebHook
+      description: |
+        Update a `WebHook`
+      parameters:
+      - name: web_hook_id
+        in: path
+        description: ID of the web_hook
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The web_hook JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebHook'
+        required: true
+      responses:
+        204:
+          description: WebHook was updated successfully
+          content: {}
+        422:
+          description: WebHook update failed
+          content: {}
+      x-codegen-request-body-name: web_hook
+components:
+  schemas:
+    Account:
+      type: object
+      properties:
+        number:
+          type: integer
+        name:
           type: string
-      customer_state_id:
-        type: integer
-      project_id:
-        type: integer
+        vat:
+          type: integer
+    Attachment:
+      type: object
+      properties:
+        filename:
+          type: string
+        attachable_type:
+          type: string
+        attachable_id:
+          type: integer
+        attachment_type_id:
+          type: integer
+        upload:
+          type: string
+    AttachmentType:
+      type: object
+      properties:
+        name:
+          type: string
+    ClientUser:
+      type: object
+      properties:
+        client:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            shortname:
+              type: string
+        name:
+          type: string
+          description: Display name of the User in the Client
+        api_key:
+          type: string
+        api_token:
+          type: string
+    Customer:
+      type: object
+      properties:
+        number:
+          type: integer
+        shortname:
+          type: string
+        name:
+          type: string
+        street:
+          type: string
+        zip:
+          type: string
+        city:
+          type: string
+        shortinfo:
+          type: string
+        tag_list:
+          type: array
+          items:
+            type: string
+        customer_state_id:
+          type: integer
+        project_id:
+          type: integer
+    CustomerState:
+      type: object
+      properties:
+        name:
+          type: string
+    Employee:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        fax:
+          type: string
+        mobile:
+          type: string
+        priority:
+          maximum: 4
+          minimum: 1
+          type: integer
+        infos:
+          type: string
+        company_id:
+          type: integer
+        company_type:
+          type: string
+        date_of_birth:
+          type: string
+          format: date
+        salutation:
+          type: string
+    Event:
+      type: object
+      properties:
+        title:
+          type: string
+        body:
+          type: string
+        date:
+          type: string
+          format: date
+        eventable_type:
+          type: string
+        eventable_id:
+          type: integer
+        client_user_id:
+          type: integer
+        employee_id:
+          type: integer
+    Facility:
+      type: object
+      properties:
+        name:
+          type: string
+        street:
+          type: string
+        zip:
+          type: string
+        city:
+          type: string
+        bunchofkeys:
+          type: string
+        customer_id:
+          type: integer
+        project_id:
+          type: integer
+    Invoice:
+      type: object
+      properties:
+        number:
+          type: integer
+          readOnly: true
+        date:
+          type: string
+          format: date
+        state:
+          type: integer
+          description: 4 = draft, 1 = printed, 0 = accounted
+          readOnly: true
+        customer_id:
+          type: integer
+        name:
+          type: string
+        street:
+          type: string
+        zip:
+          type: string
+        city:
+          type: string
+        city_additional:
+          type: string
+        text_before_line_items:
+          type: string
+        text_after_line_items:
+          type: string
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceLineItem'
+        paid:
+          type: boolean
+        notepaper_id:
+          type: integer
+          description: references the notepaper (pdf background)
+    InvoiceLineItem:
+      type: object
+      properties:
+        number:
+          type: integer
+        title:
+          type: string
+        details:
+          type: string
+        service_period_start:
+          type: string
+          format: date
+        service_period_end:
+          type: string
+          format: date
+        incomplete:
+          type: boolean
+        price:
+          type: number
+        vat:
+          type: number
+          readOnly: true
+        quantity:
+          type: number
+        unit_id:
+          type: integer
+        service_type_id:
+          type: integer
+        item_id:
+          type: integer
+    ItemOrder:
+      type: object
+      properties:
+        number:
+          type: integer
+          readOnly: true
+        date:
+          type: integer
+          format: date
+        item_orderable_id:
+          type: integer
+        item_orderable_type:
+          type: string
+        name:
+          type: string
+        street:
+          type: string
+        zip:
+          type: string
+        city:
+          type: string
+        city_additional:
+          type: string
+        text_before_line_items:
+          type: string
+        text_after_line_items:
+          type: string
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemOrderLineItem'
+        delivered:
+          type: boolean
+          readOnly: true
+        notepaper_id:
+          type: integer
+          description: id of the notepaper to be used as background
+    ItemOrderLineItem:
+      type: object
+      properties:
+        number:
+          type: integer
+        title:
+          type: string
+        details:
+          type: string
+        quantity:
+          type: number
+        item_id:
+          type: integer
+    Item:
+      type: object
+      properties:
+        number:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        sales_price:
+          type: number
+        item_category_id:
+          type: integer
+        note:
+          type: string
+        active:
+          type: boolean
+        stock:
+          type: integer
+        stock_warn_level:
+          type: integer
+        external_image_url:
+          type: string
+    ItemCategory:
+      type: object
+      properties:
+        name:
+          type: string
+        billed_with_service_type_id:
+          type: integer
+    Offer:
+      type: object
+      properties:
+        number:
+          type: integer
+        date:
+          type: integer
+          format: date
+        state:
+          type: integer
+          description: state of the invoice where 5 is a draft, 4 is an open (unanswered)
+            offer, 3 is changed, 2 is denied and 1 is accepted
+        offerable_type:
+          type: string
+        offerable_id:
+          type: integer
+        name:
+          type: string
+        street:
+          type: string
+        zip:
+          type: string
+        city:
+          type: string
+        city_additional:
+          type: string
+        text_before_line_items:
+          type: string
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OfferLineItem'
+        text_after_line_items:
+          type: string
+        parent_number:
+          type: integer
+          description: Number (not id!) of an offer that was changed with this offer
+        notepaper_id:
+          type: integer
+          description: id of the notepaper to be used as background
+    OfferLineItem:
+      type: object
+      properties:
+        number:
+          type: integer
+        title:
+          type: string
+        details:
+          type: string
+        incomplete:
+          type: boolean
+        price:
+          type: number
+        vat:
+          type: number
+          readOnly: true
+        quantity:
+          type: number
+        unit_id:
+          type: integer
+        service_type_id:
+          type: integer
+        item_id:
+          type: integer
+        is_alternative:
+          type: boolean
+          description: line item's total price is not added to the total price of
+            the offer
+    Purchase:
+      type: object
+      properties:
+        date:
+          type: string
+        number:
+          type: string
+        entry:
+          type: string
+        net_amount:
+          type: number
+        gross_amount:
+          type: number
+        text:
+          type: string
+        attachment_id:
+          type: integer
+        cost_center_id:
+          type: integer
+        cost_type_id:
+          type: integer
+        supplier_id:
+          type: integer
+    ServiceType:
+      type: object
+      properties:
+        name:
+          type: string
+        account_id:
+          type: integer
+        account_tax_rate:
+          type: integer
+          readOnly: true
+        tax_privileged_percentage:
+          type: integer
+    StaffMember:
+      type: object
+      properties:
+        number:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        mobile:
+          type: string
+    Supplier:
+      type: object
+      properties:
+        number:
+          type: integer
+        shortname:
+          type: string
+        name:
+          type: string
+        street:
+          type: string
+        zip:
+          type: string
+        city:
+          type: string
+        shortinfo:
+          type: string
+        webpage:
+          type: string
+        phone:
+          type: string
+        fax:
+          type: string
+        email:
+          type: string
+        direct_debit:
+          type: boolean
+        days_of_grace:
+          type: integer
+        discount_percentage:
+          type: number
+    Task:
+      type: object
+      properties:
+        text:
+          type: string
+        due_at:
+          type: string
+          format: date
+        completed_at:
+          type: string
+          format: date
+        taskable_type:
+          type: string
+        taskable_id:
+          type: integer
+        client_user_id:
+          type: integer
+        employee_id:
+          type: integer
+        event_id:
+          type: integer
+    Unit:
+      type: object
+      properties:
+        name:
+          type: string
+        is_flatrate:
+          type: boolean
+          description: Unit declares a flatrate - when the unit is used in an invoice
+            line item, the count value can not be changed but defaults to 1.
+    WebHook:
+      type: object
+      properties:
+        model:
+          type: string
+          description: class of the objects you want to receive WebHooks for, e.g.
+            'Customer', 'Invoice', 'Facility'
+        operation:
+          type: string
+          description: |
+            operations for which you want to receive WebHooks. possible operations are 'create', 'update', 'save' and 'destroy' where 'save' is a combination of 'create' and 'update'
+        uri:
+          type: string
+          description: uri where the WebHook should be sent
+  securitySchemes:
+    app:
+      type: apiKey
+      description: key of an app
+      name: app
+      in: query
+    user:
+      type: apiKey
+      description: api_key of a client_user
+      name: user
+      in: query
+    validuntil:
+      type: apiKey
+      description: unix time when the generated signature will expire
+      name: validuntil
+      in: query
+    signature:
+      type: apiKey
+      description: |
+        the signature is used to verify both the client_user and the app
+        that are consuming the api.
 
+        the signature is computed as follows:
 
-  CustomerState:
-    type: object
-    properties:
-      name:
-        type: string
-
-  Employee:
-    type: object
-    properties:
-      first_name:
-        type: string
-      last_name:
-        type: string
-      email:
-        type: string
-      phone:
-        type: string
-      fax:
-        type: string
-      mobile:
-        type: string
-      priority:
-        type: integer
-        minimum: 1
-        maximum: 4
-      infos:
-        type: string
-      company_id:
-        type: integer
-      company_type:
-        type: string
-      date_of_birth:
-        type: string
-        format: date
-      salutation:
-        type: string
-
-  Event:
-    type: object
-    properties:
-      title:
-        type: string
-      body:
-        type: string
-      date:
-        type: string
-        format: date
-      eventable_type:
-        type: string
-      eventable_id:
-        type: integer
-      client_user_id:
-        type: integer
-      employee_id:
-        type: integer
-
-  Facility:
-    type: object
-    properties:
-      name:
-        type: string
-      street:
-        type: string
-      zip:
-        type: string
-      city:
-        type: string
-      bunchofkeys:
-        type: string
-      customer_id:
-        type: integer
-      project_id:
-        type: integer
-
-  Invoice:
-    type: object
-    properties:
-      number:
-        type: integer
-        readOnly: true
-      date:
-        type: string
-        format: date
-      state:
-        type: integer
-        readOnly: true
-        description: 4 = draft, 1 = printed, 0 = accounted
-      customer_id:
-        type: integer
-      name:
-        type: string
-      street:
-        type: string
-      zip:
-        type: string
-      city:
-        type: string
-      city_additional:
-        type: string
-      text_before_line_items:
-        type: string
-      text_after_line_items:
-        type: string
-      line_items:
-        type: array
-        items:
-          $ref: '#/definitions/InvoiceLineItem'
-      paid:
-        type: boolean
-      notepaper_id:
-        type: integer
-        description: references the notepaper (pdf background)
-
-  InvoiceLineItem:
-    type: object
-    properties:
-      number:
-        type: integer
-      title:
-        type: string
-      details:
-        type: string
-      service_period_start:
-        type: string
-        format: date
-      service_period_end:
-        type: string
-        format: date
-      incomplete:
-        type: boolean
-      price:
-        type: number
-      vat:
-        type: number
-        readOnly: true
-      quantity:
-        type: number
-      unit_id:
-        type: integer
-      service_type_id:
-        type: integer
-      item_id:
-        type: integer
-
-  ItemOrder:
-    type: object
-    properties:
-      number:
-        type: integer
-        readOnly: true
-      date:
-        type: integer
-        format: date
-      item_orderable_id:
-        type: integer
-      item_orderable_type:
-        type: string
-      name:
-        type:  string
-      street:
-        type: string
-      zip:
-        type: string
-      city:
-        type: string
-      city_additional:
-        type: string
-      text_before_line_items:
-        type: string
-      text_after_line_items:
-        type: string
-      line_items:
-        type: array
-        items:
-          $ref: '#/definitions/ItemOrderLineItem'
-      delivered:
-        type: boolean
-        readOnly: true
-      notepaper_id:
-        type: integer
-        description: id of the notepaper to be used as background
-
-  ItemOrderLineItem:
-    type: object
-    properties:
-      number:
-        type: integer
-      title:
-        type: string
-      details:
-        type: string
-      quantity:
-        type: number
-      item_id:
-        type: integer
-
-
-  Item:
-    type: object
-    properties:
-      number:
-        type: integer
-      name:
-        type: string
-      description:
-        type: string
-      sales_price:
-        type: number
-      item_category_id:
-        type: integer
-      note:
-        type: string
-      active:
-        type: boolean
-      stock:
-        type: integer
-      stock_warn_level:
-        type: integer
-      external_image_url:
-        type: string
-
-  ItemCategory:
-    type: object
-    properties:
-      name:
-        type: string
-      billed_with_service_type_id:
-        type: integer
-
-  Offer:
-    type: object
-    properties:
-      number:
-        type: integer
-      date:
-        type: integer
-        format: date
-      state:
-        type: integer
-        description: state of the invoice where 5 is a draft, 4 is an open (unanswered) offer, 3 is changed, 2 is denied and 1 is accepted
-      offerable_type:
-        type: string
-      offerable_id:
-        type: integer
-      name:
-        type: string
-      street:
-        type: string
-      zip:
-        type: string
-      city:
-        type: string
-      city_additional:
-        type: string
-      text_before_line_items:
-        type: string
-      line_items:
-        type: array
-        items:
-          $ref: '#/definitions/OfferLineItem'
-      text_after_line_items:
-        type: string
-      parent_number:
-        type: integer
-        description: Number (not id!) of an offer that was changed with this offer
-      notepaper_id:
-        type: integer
-        description: id of the notepaper to be used as background
-
-  OfferLineItem:
-    type: object
-    properties:
-      number:
-        type: integer
-      title:
-        type: string
-      details:
-        type: string
-      incomplete:
-        type: boolean
-      price:
-        type: number
-      vat:
-        type: number
-        readOnly: true
-      quantity:
-        type: number
-      unit_id:
-        type: integer
-      service_type_id:
-        type: integer
-      item_id:
-        type: integer
-      is_alternative:
-        type: boolean
-        description: line item's total price is not added to the total price of the offer
-
-  Purchase:
-    type: object
-    properties:
-      date:
-        type: string
-      number:
-        type: string
-      entry:
-        type: string
-      net_amount:
-        type: number
-      gross_amount:
-        type: number
-      text:
-        type: string
-      attachment_id:
-        type: integer
-      cost_center_id:
-        type: integer
-      cost_type_id:
-        type: integer
-      supplier_id:
-        type: integer
-
-  ServiceType:
-    type: object
-    properties:
-      name:
-        type: string
-      account_id:
-        type: integer
-      account_tax_rate:
-        type: integer
-        readOnly: true
-      tax_privileged_percentage:
-        type: integer
-
-  StaffMember:
-    type: object
-    properties:
-      number:
-        type: integer
-      first_name:
-        type: string
-      last_name:
-        type: string
-      email:
-        type: string
-      phone:
-        type: string
-      mobile:
-        type: string
-
-  Supplier:
-    type: object
-    properties:
-      number:
-        type: integer
-      shortname:
-        type: string
-      name:
-        type: string
-      street:
-        type: string
-      zip:
-        type: string
-      city:
-        type: string
-      shortinfo:
-        type: string
-      webpage:
-        type: string
-      phone:
-        type: string
-      fax:
-        type: string
-      email:
-        type: string
-      direct_debit:
-        type: boolean
-      days_of_grace:
-        type: integer
-      discount_percentage:
-        type: number
-
-  Task:
-    type: object
-    properties:
-      text:
-        type: string
-      due_at:
-        type: string
-        format: date
-      completed_at:
-        type: string
-        format: date
-      taskable_type:
-        type: string
-      taskable_id:
-        type: integer
-      client_user_id:
-        type: integer
-      employee_id:
-        type: integer
-      event_id:
-        type: integer
-
-  Unit:
-    type: object
-    properties:
-      name:
-        type: string
-      is_flatrate:
-        type: boolean
-        description: Unit declares a flatrate - when the unit is used in an invoice line item, the count value can not be changed but defaults to 1.
-
-  WebHook:
-    type: object
-    properties:
-      model:
-        type: string
-        description: class of the objects you want to receive WebHooks for, e.g. 'Customer', 'Invoice', 'Facility'
-      operation:
-        type: string
-        description: |
-          operations for which you want to receive WebHooks. possible operations are 'create', 'update', 'save' and 'destroy' where 'save' is a combination of 'create' and 'update'
-      uri:
-        type: string
-        description: uri where the WebHook should be sent
-
+        `sha2($client_user_api_token + ':' + $app_token + ':' + $validuntil)`
+      name: signature
+      in: query
