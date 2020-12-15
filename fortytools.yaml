@@ -225,7 +225,7 @@ paths:
           description: Sends the attachment
     patch:
       tags:
-        - Attachmet
+        - Attachment
       description: |
         Update an `Attachment`
       parameters:
