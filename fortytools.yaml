@@ -78,7 +78,7 @@ paths:
           schema:
             type: string
       requestBody:
-        description: The account JSON you want to post
+        description: The user credentials you want to post
         content:
           application/json:
             schema:
