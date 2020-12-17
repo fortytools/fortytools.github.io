@@ -26,6 +26,8 @@ tags:
   description: AttachmentType methods
 - name: Auth
   description: Methods to check authentication
+- name: Booking
+  description: Booking (time entry) methods
 - name: Customer
   description: Customer methods
 - name: CustomerState
@@ -1705,6 +1707,139 @@ paths:
         200:
           description: Sends the staff_member
           content: {}
+  /staff_members/{staff_member_id}/bookings:
+    get:
+      tags:
+      - Booking
+      description: |
+        List Bookings for a StaffMember
+      parameters:
+      - name: staff_member_id
+        in: path
+        description: ID of the staff_member
+        required: true
+        schema:
+          type: integer
+      - name: from
+        in: query
+        description: first date of period
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: to
+        in: query
+        description: last date of period
+        required: false
+        schema:
+          type: string
+          format: date
+      responses:
+        200: 
+          description: Sends the bookings
+    post:
+      tags:
+      - Booking
+      description: |
+        Create a new Booking
+      parameters:
+      - name: staff_member_id
+        in: path
+        description: ID of the staff_member
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The booking JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Booking'
+        required: true
+      responses:
+        201:
+          description: Booking was created successfully
+          content: {}
+        422:
+          description: Booking creation failed
+          content: {}
+  /staff_members/{staff_member_id}/bookings/{booking_id}:
+    get:
+      tags:
+      - Booking
+      description: |
+        Display data of a Booking
+      parameters:
+      - name: staff_member_id
+        in: path
+        description: ID of the staff_member
+        required: true
+        schema:
+          type: integer
+      - name: booking_id
+        in: path
+        description: ID of the booking
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Sends the booking
+    patch:
+      tags:
+      - Booking
+      description: |
+        Display data of a Booking
+      parameters:
+      - name: staff_member_id
+        in: path
+        description: ID of the staff_member
+        required: true
+        schema:
+          type: integer
+      - name: booking_id
+        in: path
+        description: ID of the booking
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The booking JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Booking'
+        required: true
+      responses:
+        204:
+          description: Booking was updated successfully
+        422:
+          description: Booking update failed
+    delete:
+      tags:
+      - Booking
+      description: |
+        Delete a Booking
+      parameters:
+      - name: staff_member_id
+        in: path
+        description: ID of the staff_member
+        required: true
+        schema:
+          type: integer
+      - name: booking_id
+        in: path
+        description: ID of the booking
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Booking was destroyed successfully
+          content: {}
+        405:
+          description: Booking could not be destroyed
+          content: {}
   /suppliers:
     get:
       tags:
@@ -2126,6 +2261,28 @@ components:
       properties:
         name:
           type: string
+    Booking:
+      type: object
+      properties:
+        starts_at:
+          type: string
+          format: datetime
+        ends_at:
+          type: string
+          format: datetime
+        staff_member_id:
+          type: integer
+        project_id:
+          type: integer
+        text:
+          type: string
+        project_assignment_id:
+          type: string
+        sales_regime_id:
+          type: integer
+        wage_regime_id:
+          type: integer
+
     ClientUser:
       type: object
       properties:
@@ -2550,10 +2707,10 @@ components:
           type: string
         due_at:
           type: string
-          format: date
+          format: datetime
         completed_at:
           type: string
-          format: date
+          format: datetime
         taskable_type:
           type: string
         taskable_id:
