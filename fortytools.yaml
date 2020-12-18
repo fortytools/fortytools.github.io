@@ -1,5 +1,4 @@
 openapi: 3.0.1
-o
 
 info:
   title: Skyline and Fortytools Web API
@@ -49,6 +48,8 @@ tags:
   description: ItemCategory methods
 - name: Offer
   description: Offer methods
+- name: ProjectAssignment
+  description: ProjectAssignment methods
 - name: Purchase
   description: Purchase methods
 - name: ServiceType
@@ -1841,6 +1842,60 @@ paths:
         405:
           description: Booking could not be destroyed
           content: {}
+  /staff_members/{staff_member_id}/project_assignments:
+    get:
+      tags:
+      - ProjectAssignment
+      description: |
+        List ProjectAssignments for a StaffMember in a given period
+      parameters:
+      - name: staff_member_id
+        in: path
+        description: ID of the staff_member
+        required: true
+        schema:
+          type: integer
+      - name: from
+        in: query
+        description: first date of period
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: to
+        in: query
+        description: last date of period
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        200:
+          description: Sends the bookings
+        400:
+          description: Bad request - probably from and/or to params are missing
+  /staff_members/{staff_member_id}/project_assignments/{project_assignment_id}:
+    get:
+      tags:
+      - ProjectAssignment
+      description: |
+        Display data of a ProjectAssignment
+      parameters:
+      - name: staff_member_id
+        in: path
+        description: ID of the staff_member
+        required: true
+        schema:
+          type: integer
+      - name: project_assignment_id
+        in: path
+        description: ID of the project_assignment
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Sends the project_assignment
   /suppliers:
     get:
       tags:
@@ -2283,8 +2338,6 @@ components:
           type: integer
         wage_regime_id:
           type: integer
-        external_id:
-          type: string
 
     ClientUser:
       type: object
@@ -2616,6 +2669,62 @@ components:
           type: boolean
           description: line item's total price is not added to the total price of
             the offer
+    ProjectAssignment:
+      type: object
+      properties:
+        starts_at:
+          type: string
+          format: datetime
+        ends_at:
+          type: string
+          format: datetime
+        location:
+          type: string
+        description:
+          type: string
+        staff_member_id:
+          type: integer
+        project_id:
+          type: integer
+        siblings:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              staff_member_id:
+                type: integer
+              staff_member_name:
+                type: string
+          readOnly: true
+        tasks:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              filename:
+                type: string
+              url:
+                type: string
+                description: Download url that will expire after some minutes
+        booking_id:
+          type: string
+        sales_regime_id:
+          type: integer
+        wage_regime_id:
+          type: integer
     Purchase:
       type: object
       properties:
