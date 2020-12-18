@@ -1791,7 +1791,7 @@ paths:
       tags:
       - Booking
       description: |
-        Display data of a Booking
+        Update a Booking
       parameters:
       - name: staff_member_id
         in: path
