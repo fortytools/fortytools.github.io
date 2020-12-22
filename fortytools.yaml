@@ -1871,7 +1871,13 @@ paths:
           format: date
       responses:
         200:
-          description: Sends the bookings
+          description: Sends the project_assignments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectAssignment'
         400:
           description: Bad request - probably from and/or to params are missing
   /staff_members/{staff_member_id}/project_assignments/{project_assignment_id}:
@@ -1896,6 +1902,12 @@ paths:
       responses:
         200:
           description: Sends the project_assignment
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ProjectAssignment'
   /suppliers:
     get:
       tags:
