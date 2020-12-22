@@ -7,7 +7,7 @@ info:
   termsOfService: https://skyline-web.de/nutzungsbedingungen
   contact:
     email: support@skyline-web.de
-  version: 2.1.1
+  version: 2.1.2
 
 servers:
 - url: https://skyline.fortytools.com/api/v2
@@ -158,7 +158,12 @@ paths:
       responses:
         200:
           description: Sends the account
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Account'
     delete:
       tags:
       - Account
@@ -243,7 +248,12 @@ paths:
       responses:
         200:
           description: Sends the attachment
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Attachment'
     delete:
       tags:
       - Attachment
@@ -341,7 +351,12 @@ paths:
       responses:
         200:
           description: Sends the attachment_type
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/AttachmentType'
     delete:
       tags:
       - AttachmentType
@@ -439,7 +454,12 @@ paths:
       responses:
         200:
           description: Sends the customer
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Customer'
     delete:
       tags:
       - Customer
@@ -557,7 +577,12 @@ paths:
       responses:
         200:
           description: Sends the facility
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Facility'
     delete:
       tags:
       - Facility
@@ -667,7 +692,12 @@ paths:
       responses:
         200:
           description: Sends the customer_state
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/CustomerState'
     delete:
       tags:
       - CustomerState
@@ -765,7 +795,12 @@ paths:
       responses:
         200:
           description: Sends the employee
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Employee'
     delete:
       tags:
       - Employee
@@ -863,7 +898,12 @@ paths:
       responses:
         200:
           description: Sends the event
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Event'
     delete:
       tags:
       - Event
@@ -961,7 +1001,12 @@ paths:
       responses:
         200:
           description: Sends the invoice
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Invoice'
     delete:
       tags:
       - Invoice
@@ -1100,7 +1145,12 @@ paths:
       responses:
         200:
           description: Sends the item_order
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ItemOrder'
     delete:
       tags:
       - ItemOrder
@@ -1218,7 +1268,12 @@ paths:
       responses:
         200:
           description: Sends the item
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Item'
     delete:
       tags:
       - Item
@@ -1316,7 +1371,12 @@ paths:
       responses:
         200:
           description: Sends the item_category
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ItemCategory'
     delete:
       tags:
       - ItemCategory
@@ -1414,7 +1474,12 @@ paths:
       responses:
         200:
           description: Sends the offer
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Offer'
     delete:
       tags:
       - Offer
@@ -1532,7 +1597,12 @@ paths:
       responses:
         200:
           description: Sends the purchase
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Purchase'
     delete:
       tags:
       - Purchase
@@ -1630,7 +1700,12 @@ paths:
       responses:
         200:
           description: Sends the service_type
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ServiceType'
     delete:
       tags:
       - ServiceType
@@ -1708,7 +1783,12 @@ paths:
       responses:
         200:
           description: Sends the staff_member
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/StaffMember'
   /staff_members/{staff_member_id}/bookings:
     get:
       tags:
@@ -1739,6 +1819,12 @@ paths:
       responses:
         200:
           description: Sends the bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
     post:
       tags:
       - Booking
@@ -1787,6 +1873,12 @@ paths:
       responses:
         200:
           description: Sends the booking
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Booking'
     patch:
       tags:
       - Booking
@@ -1959,7 +2051,12 @@ paths:
       responses:
         200:
           description: Sends the supplier
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Supplier'
     delete:
       tags:
       - Supplier
@@ -2057,7 +2154,12 @@ paths:
       responses:
         200:
           description: Sends the task
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Task'
     delete:
       tags:
       - Task
@@ -2155,7 +2257,12 @@ paths:
       responses:
         200:
           description: Sends the unit
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Unit'
     delete:
       tags:
       - Unit
@@ -2253,7 +2360,12 @@ paths:
       responses:
         200:
           description: Sends the web_hook
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Unit'
     delete:
       tags:
       - WebHook
