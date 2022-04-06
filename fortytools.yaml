@@ -1,12 +1,12 @@
 openapi: 3.0.1
 
 info:
-  title: Skyline and Fortytools Web API
+  title: Fortytools Web API
   description: |
-    API for https://www.skyline-web.de and https://www.fortytools.com (use app.fortytools.com instead of skyline.fortytools.com)
-  termsOfService: https://skyline-web.de/nutzungsbedingungen
+    API for https://www.fortytools.com
+  termsOfService: https://www.fortytools.com/nutzungsbedingungen
   contact:
-    email: support@skyline-web.de
+    email: support@fortytools.com
   version: 2.1.2
 
 servers:
