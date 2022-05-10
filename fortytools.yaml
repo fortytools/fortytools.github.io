@@ -58,6 +58,8 @@ tags:
   description: StaffMember methods
 - name: Supplier
   description: Supplier methods
+- name: Purchase
+  description: Purchase methods
 - name: Task
   description: Task methods
 - name: Unit
