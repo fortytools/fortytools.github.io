@@ -1552,6 +1552,43 @@ paths:
       - Purchase
       description: |
         Gets `Purchase` objects
+      parameters:
+        - name: user
+          in: query
+          description: User ID
+          required: true
+          schema:
+            type: string
+        - name: app
+          in: query
+          description: Application name
+          required: true
+          schema:
+            type: string
+        - name: signature
+          in: query
+          description: Signature
+          required: true
+          schema:
+            type: string
+        - name: validuntil
+          in: query
+          description: Valid until timestamp
+          required: true
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Data per page
+          schema:
+            type: integer
+            example: 10
       responses:
         200:
           description: Sends list of purchases
@@ -1561,26 +1598,26 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Purchase'
-    post:
-      tags:
-      - Purchase
-      description: |
-        Create a new `Purchase`
-      requestBody:
-        description: The purchase JSON you want to post
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Purchase'
-        required: true
-      responses:
-        201:
-          description: Purchase was created successfully
-          content: {}
-        422:
-          description: Purchase creation failed
-          content: {}
-      x-codegen-request-body-name: purchase
+    # post:
+    #   tags:
+    #   - Purchase
+    #   description: |
+    #     Create a new `Purchase`
+    #   requestBody:
+    #     description: The purchase JSON you want to post
+    #     content:
+    #       application/json:
+    #         schema:
+    #           $ref: '#/components/schemas/Purchase'
+    #     required: true
+    #   responses:
+    #     201:
+    #       description: Purchase was created successfully
+    #       content: {}
+    #     422:
+    #       description: Purchase creation failed
+    #       content: {}
+    #   x-codegen-request-body-name: purchase
   /purchases/{purchase_id}:
     get:
       tags:
@@ -1594,61 +1631,83 @@ paths:
         required: true
         schema:
           type: integer
+      - name: user
+        in: query
+        description: User ID
+        required: true
+        schema:
+          type: string
+      - name: app
+        in: query
+        description: Application name
+        required: true
+        schema:
+          type: string
+      - name: signature
+        in: query
+        description: Signature
+        required: true
+        schema:
+          type: string
+      - name: validuntil
+        in: query
+        description: Valid until timestamp
+        required: true
+        schema:
+          type: integer
       responses:
         200:
           description: Sends the purchase
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Purchase'
-    delete:
-      tags:
-      - Purchase
-      description: |
-        Delete a `Purchase`
-      parameters:
-      - name: purchase_id
-        in: path
-        description: ID of the purchase
-        required: true
-        schema:
-          type: integer
-      responses:
-        200:
-          description: Purchase was destroyed successfully
-          content: {}
-        405:
-          description: Purchase could not be deleted
-          content: {}
-    patch:
-      tags:
-      - Purchase
-      description: |
-        Update a `Purchase`
-      parameters:
-      - name: purchase_id
-        in: path
-        description: ID of the purchase
-        required: true
-        schema:
-          type: integer
-      requestBody:
-        description: The purchase JSON you want to post
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Purchase'
-        required: true
-      responses:
-        204:
-          description: Purchase was updated successfully
-          content: {}
-        422:
-          description: Purchase update failed
-          content: {}
-      x-codegen-request-body-name: purchase
+                $ref: '#/components/schemas/Purchase'
+    # delete:
+    #   tags:
+    #   - Purchase
+    #   description: |
+    #     Delete a `Purchase`
+    #   parameters:
+    #   - name: purchase_id
+    #     in: path
+    #     description: ID of the purchase
+    #     required: true
+    #     schema:
+    #       type: integer
+    #   responses:
+    #     200:
+    #       description: Purchase was destroyed successfully
+    #       content: {}
+    #     405:
+    #       description: Purchase could not be deleted
+    #       content: {}
+    # patch:
+    #   tags:
+    #   - Purchase
+    #   description: |
+    #     Update a `Purchase`
+    #   parameters:
+    #   - name: purchase_id
+    #     in: path
+    #     description: ID of the purchase
+    #     required: true
+    #     schema:
+    #       type: integer
+    #   requestBody:
+    #     description: The purchase JSON you want to post
+    #     content:
+    #       application/json:
+    #         schema:
+    #           $ref: '#/components/schemas/Purchase'
+    #     required: true
+    #   responses:
+    #     204:
+    #       description: Purchase was updated successfully
+    #       content: {}
+    #     422:
+    #       description: Purchase update failed
+    #       content: {}
+    #   x-codegen-request-body-name: purchase
   /service_types:
     get:
       tags:
@@ -2462,7 +2521,6 @@ components:
           type: integer
         wage_regime_id:
           type: integer
-
     ClientUser:
       type: object
       properties:
@@ -2849,29 +2907,50 @@ components:
           type: integer
         wage_regime_id:
           type: integer
+    Position:
+      type: object
+      properties:
+        id:
+          type: integer
+        purchase_id:
+          type: integer
+        cost_type_id:
+          type: integer
+        cost_center_id:
+          type: integer
+        gross_amount:
+          type: string
+        net_amount:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
     Purchase:
       type: object
       properties:
+        id:
+          type: integer
         date:
           type: string
         number:
           type: string
         entry:
           type: string
-        net_amount:
-          type: number
-        gross_amount:
-          type: number
         text:
           type: string
         attachment_id:
           type: integer
-        cost_center_id:
-          type: integer
-        cost_type_id:
-          type: integer
         supplier_id:
           type: integer
+        net_amount:
+          type: number
+        gross_amount:
+          type: number
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Position'
     ServiceType:
       type: object
       properties:
