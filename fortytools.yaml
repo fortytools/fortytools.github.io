@@ -106,7 +106,69 @@ paths:
           description: The app identified by the corresponding query parameter is not installed for any client of the user
         403:
           description: Invalid credentials, there is no User with this email / password combination.
-
+  /auth/firebase:
+    post:
+      tags:
+      - Auth
+      description: |
+        Authenticate User (email / password) and get firebase credentials
+      security: []
+      requestBody:
+        description: the user credentials you want to post
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+              required:
+                - email
+                - password
+      responses:
+        200:
+          description: Send Firebase credentials including firebase_id and firebase_token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FirebaseCredential'
+        401:
+          description: Invalid credentials, there is no User with this email / password combination.
+        403:
+          description: Valid Credentials, but the user is not active or hasn't firebase access enabled
+  /auth/token_auth:
+    post:
+      tags:
+      - Auth
+      description: |
+        Authenticate User (token) and get firebase credentials
+      security: []
+      requestBody:
+        description: the Token you want to exchange
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+              required:
+                - token
+      responses:
+        200:
+          description: Send Firebase credentials including firebase_id and firebase_token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FirebaseCredential'
+        401:
+          description: Invalid credentials, there is no User with this token.
+        403:
+          description: Valid Credentials, but the user is not active or hasn't firebase access enabled
   /accounts:
     get:
       tags:
@@ -2635,6 +2697,13 @@ components:
           type: integer
         project_id:
           type: integer
+    FirebaseCredential:
+      type: object
+      properties:
+        firebase_id:
+          type: string
+        firebase_token:
+          type: string
     Invoice:
       type: object
       properties:
