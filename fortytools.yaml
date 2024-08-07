@@ -1489,7 +1489,7 @@ paths:
           description: ItemCategory update failed
           content: {}
       x-codegen-request-body-name: item_category
-  /oauth/token:
+  /token:
     post:
       tags:
       - Oauth
@@ -3212,9 +3212,9 @@ components:
       description: look at Oauth documentation
       flows:
         clientCredentials:
-          tokenUrl: https://app.fortytools.com/oauth/token/
+          tokenUrl: https://app.fortytools.com/api/v2/token/
           scopes: {}
     BearerAuth:
       type: http
-      scheme: bearer
+      scheme: Bearer
       description: get access token from oauth2
