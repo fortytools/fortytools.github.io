@@ -17,6 +17,8 @@ security:
   user: []
   validuntil: []
   signature: []
+- ClientCredentials: []
+  BearerAuth: []
 tags:
 - name: Account
   description: Accounts as in Accounting
@@ -46,6 +48,8 @@ tags:
   description: Item methods
 - name: ItemCategory
   description: ItemCategory methods
+- name: Oauth
+  description: Oauth methods
 - name: Offer
   description: Offer methods
 - name: ProjectAssignment
@@ -1485,6 +1489,42 @@ paths:
           description: ItemCategory update failed
           content: {}
       x-codegen-request-body-name: item_category
+  /token:
+    post:
+      tags:
+      - Oauth
+      description: |
+        Authenticate client ID and client secret to get access token
+      security: []
+      requestBody:
+        description: the client id and client secret that you get from ERP.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                grant_type:
+                  type: string
+                  default: client_credentials
+              required:
+                - client_id
+                - client_secret
+                - grant_type
+      responses:
+        200:
+          description: Send access token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessToken'
+        400:
+          description: Invalid request. You must fill grant_type with 'client_credential'.
+        401:
+          description: Invalid client credentials. Wrong client ID or client secret.
   /offers:
     get:
       tags:
@@ -2535,6 +2575,18 @@ paths:
       x-codegen-request-body-name: web_hook
 components:
   schemas:
+    AccessToken:
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+        expires_in:
+          type: integer
+          format: seconds
+        created_at:
+          type: integer
     Account:
       type: object
       properties:
@@ -3155,3 +3207,14 @@ components:
         `sha2($client_user_api_token + ':' + $app_token + ':' + $validuntil)`
       name: signature
       in: query
+    ClientCredentials:
+      type: oauth2
+      description: look at Oauth documentation
+      flows:
+        clientCredentials:
+          tokenUrl: https://app.fortytools.com/api/v2/token/
+          scopes: {}
+    BearerAuth:
+      type: http
+      scheme: Bearer
+      description: get access token from oauth2
