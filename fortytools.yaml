@@ -17,8 +17,7 @@ security:
   user: []
   validuntil: []
   signature: []
-- ClientCredentials: []
-  BearerAuth: []
+- bearerAuth: []
 tags:
 - name: Account
   description: Accounts as in Accounting
@@ -1494,7 +1493,7 @@ paths:
       tags:
       - Oauth
       description: |
-        Authenticate client ID and client secret to get access token
+        Get access token
       security: []
       requestBody:
         description: the client id and client secret that you get from ERP.
@@ -3207,14 +3206,12 @@ components:
         `sha2($client_user_api_token + ':' + $app_token + ':' + $validuntil)`
       name: signature
       in: query
-    ClientCredentials:
-      type: oauth2
-      description: look at Oauth documentation
-      flows:
-        clientCredentials:
-          tokenUrl: https://app.fortytools.com/api/v2/token/
-          scopes: {}
-    BearerAuth:
+    bearerAuth:
       type: http
-      scheme: Bearer
-      description: get access token from oauth2
+      scheme: bearer
+      description: |
+        get access token from endpoint [token](#tag/Oauth/paths/~1token/post)
+
+        then add it to Authorization request header as follow:
+        
+        `Authorization: Bearer <access token>`
