@@ -12,13 +12,14 @@ info:
 servers:
 - url: https://skyline.fortytools.com/api/v2
 - url: https://app.fortytools.com/api/v2
+
 security:
 - app: []
   user: []
   validuntil: []
   signature: []
-- ClientCredentials: []
-  BearerAuth: []
+- oauth: []
+
 tags:
 - name: Account
   description: Accounts as in Accounting
@@ -1655,30 +1656,6 @@ paths:
       description: |
         Gets `Purchase` objects
       parameters:
-        - name: user
-          in: query
-          description: User ID
-          required: true
-          schema:
-            type: string
-        - name: app
-          in: query
-          description: Application name
-          required: true
-          schema:
-            type: string
-        - name: signature
-          in: query
-          description: Signature
-          required: true
-          schema:
-            type: string
-        - name: validuntil
-          in: query
-          description: Valid until timestamp
-          required: true
-          schema:
-            type: integer
         - name: offset
           in: query
           description: Page number
@@ -1730,30 +1707,6 @@ paths:
       - name: purchase_id
         in: path
         description: ID of the purchase
-        required: true
-        schema:
-          type: integer
-      - name: user
-        in: query
-        description: User ID
-        required: true
-        schema:
-          type: string
-      - name: app
-        in: query
-        description: Application name
-        required: true
-        schema:
-          type: string
-      - name: signature
-        in: query
-        description: Signature
-        required: true
-        schema:
-          type: string
-      - name: validuntil
-        in: query
-        description: Valid until timestamp
         required: true
         schema:
           type: integer
@@ -3183,23 +3136,23 @@ components:
   securitySchemes:
     app:
       type: apiKey
-      description: key of an app
+      description: DEPRECATED key of an app
       name: app
       in: query
     user:
       type: apiKey
-      description: api_key of a client_user
+      description: DEPRECATED api_key of a client_user
       name: user
       in: query
     validuntil:
       type: apiKey
-      description: unix time when the generated signature will expire
+      description: DEPRECATED unix time when the generated signature will expire
       name: validuntil
       in: query
     signature:
       type: apiKey
       description: |
-        the signature is used to verify both the client_user and the app
+        DEPRECATED the signature is used to verify both the client_user and the app
         that are consuming the api.
 
         the signature is computed as follows:
@@ -3207,14 +3160,11 @@ components:
         `sha2($client_user_api_token + ':' + $app_token + ':' + $validuntil)`
       name: signature
       in: query
-    ClientCredentials:
+    oauth:
       type: oauth2
-      description: look at Oauth documentation
+      description: This API uses OAuth 2 with client credentials flow. Use this instead of the deprecated API key authorization.
       flows:
         clientCredentials:
-          tokenUrl: https://app.fortytools.com/api/v2/token/
-          scopes: {}
-    BearerAuth:
-      type: http
-      scheme: Bearer
-      description: get access token from oauth2
+          tokenUrl: https://app.fortytools.com/api/v2/token
+          scopes:
+            public: Default scope with full access to API
