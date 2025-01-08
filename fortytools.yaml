@@ -1881,6 +1881,26 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/StaffMember'
+    post:
+      tags:
+      - StaffMember
+      description: |
+        Create a new `StafFMember`
+      requestBody:
+        description: The staff member JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StaffMember'
+        required: true
+      responses:
+        201:
+          description: StaffMember was created successfully
+          content: {}
+        422:
+          description: StaffMember creation failed
+          content: {}
+      x-codegen-request-body-name: staff_member
   /staff_members/{staff_member_id}:
     get:
       tags:
@@ -3044,10 +3064,16 @@ components:
           type: integer
         first_name:
           type: string
+          description: One or more first names of the staff member
         last_name:
           type: string
+          description: The last name of the staff member
         email:
           type: string
+          description: Primary e-mail address of the staff member (has to be unique)
+        email_additional:
+          type: string
+          description: Additional e-mail address of the staff member (e.g. the private email address)
         phone:
           type: string
         mobile:
@@ -3058,6 +3084,15 @@ components:
         date_of_separation:
           type: string
           format: date
+        information:
+          type: string
+          description: Information/notes about this staff member
+        tax_number:
+          type: String
+          description: The staff members tax number
+        insurance_number:
+          type: String
+          description: The staff members insurance number (Sozialversicherungsnummer in Germany)
     Supplier:
       type: object
       properties:
