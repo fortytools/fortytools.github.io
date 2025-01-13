@@ -1885,7 +1885,7 @@ paths:
       tags:
       - StaffMember
       description: |
-        Create a new `StafFMember`
+        Create a new `StaffMember`
       requestBody:
         description: The staff member JSON you want to post
         content:
@@ -3060,6 +3060,9 @@ components:
     StaffMember:
       type: object
       properties:
+        salutation:
+          type: string
+          description: One of `female`, `male`, `none`
         number:
           type: integer
         first_name:
@@ -3068,6 +3071,16 @@ components:
         last_name:
           type: string
           description: The last name of the staff member
+        date_of_birth:
+          type: string
+          format: date
+        street:
+          type: string
+          description: Including number etc.
+        city:
+          type: string
+        zip:
+          type: string
         email:
           type: string
           description: Primary e-mail address of the staff member (has to be unique)
