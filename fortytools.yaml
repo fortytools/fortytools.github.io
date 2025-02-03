@@ -7,7 +7,7 @@ info:
   termsOfService: https://www.fortytools.com/nutzungsbedingungen
   contact:
     email: support@fortytools.com
-  version: 2.1.2
+  version: 2.2.2
 
 servers:
 - url: https://skyline.fortytools.com/api/v2
@@ -59,6 +59,8 @@ tags:
   description: Purchase methods
 - name: ServiceType
   description: ServiceType methods
+- name: Sponsor
+  description: Sponsor methods
 - name: StaffMember
   description: StaffMember methods
 - name: Supplier
@@ -1866,6 +1868,109 @@ paths:
           description: ServiceType update failed
           content: {}
       x-codegen-request-body-name: service_type
+  /sponsors:
+    get:
+      tags:
+      - Sponsor
+      description: |
+        Gets `Sponsor` objects
+      responses:
+        200:
+          description: Sends list of sponsors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sponsor'
+    post:
+      tags:
+      - Sponsor
+      description: |
+        Create a new `Sponsor`
+      requestBody:
+        description: The sponsor JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sponsor'
+        required: true
+      responses:
+        201:
+          description: Sponsor was created successfully
+          content: {}
+        422:
+          description: Sponsor creation failed
+          content: {}
+      x-codegen-request-body-name: sponsor
+  /sponsors/{sponsor_id}:
+    get:
+      tags:
+      - Sponsor
+      description: |
+        Retrieve data of a `Sponsor`
+      parameters:
+      - name: sponsor_id
+        in: path
+        description: ID of the sponsor
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Sends the sponsor
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Sponsor'
+    delete:
+      tags:
+      - Sponsor
+      description: |
+        Delete a `Sponsor`
+      parameters:
+      - name: sponsor_id
+        in: path
+        description: ID of the service_type
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Sponsor was destroyed successfully
+          content: {}
+        405:
+          description: Sponsor could not be deleted
+          content: {}
+    patch:
+      tags:
+      - Sponsor
+      description: |
+        Update a `Sponsor`
+      parameters:
+      - name: sponsor_id
+        in: path
+        description: ID of the sponsor
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The updated sponsor JSON
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sponsor'
+        required: true
+      responses:
+        204:
+          description: Sponsor was updated successfully
+          content: {}
+        422:
+          description: Sponsor update failed
+          content: {}
+      x-codegen-request-body-name: sponsor
   /staff_members:
     get:
       tags:
@@ -3057,6 +3162,33 @@ components:
           readOnly: true
         tax_privileged_percentage:
           type: integer
+    Sponsor:
+      type: object
+      properties:
+        name:
+          type: string
+        street:
+          type: string
+        zip:
+          type: string
+        city: 
+          type: string
+        city_additional:
+          type: string
+        ik:
+          type: string
+          description: Unique identifier in german public health system (Insititutskennzeichen)
+        payment_practice_id:
+          type: integer
+        email:
+          type: string
+        delivery_method:
+          type: string
+          description: One of `none`, `email`, `manually`
+        account_number:
+          type: integer
+        shortinfo:
+          type: string
     StaffMember:
       type: object
       properties:
