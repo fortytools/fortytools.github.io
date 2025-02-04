@@ -700,7 +700,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Facility'
+              $ref: '#/components/schemas/FacilityUpdate'
         required: true
       responses:
         204:
@@ -2811,6 +2811,25 @@ components:
         employee_id:
           type: integer
     Facility:
+      type: object
+      properties:
+        name:
+          type: string
+        street:
+          type: string
+        zip:
+          type: string
+        city:
+          type: string
+        bunchofkeys:
+          type: string
+        customer_id:
+          type: integer
+        project_id:
+          type: integer
+        number:
+          type: integer
+    FacilityUpdate:
       type: object
       properties:
         name:
