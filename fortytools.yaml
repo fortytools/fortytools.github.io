@@ -2735,6 +2735,46 @@ components:
     Customer:
       type: object
       properties:
+        email:
+          type: string
+        fax:
+          type: string
+        webpage:
+          type: string
+        phone:
+          type: string
+        mobile:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        planning_info:
+          type: string
+        customer_since:
+          type: string
+          format: date
+        customer_until:
+          type: string
+          format: date
+        date_of_birth:
+          type: string
+          format: date
+        date_of_death:
+          type: string
+          format: date
+        latitude:
+          type: number
+        longitude:
+          type: number
+        reference:
+          type: string
+        insurance_number:
+          type: string
+        sponsor_id:
+          type: integer
+        custom_attributes:
+          type: object
         number:
           type: integer
         shortname:
