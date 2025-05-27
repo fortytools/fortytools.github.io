@@ -182,6 +182,17 @@ paths:
       - Account
       description: |
         Gets `Account` objects
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: integer
+    description: The numbers of items to return      
       responses:
         200:
           description: Sends list of accounts
@@ -375,6 +386,16 @@ paths:
       - AttachmentType
       description: |
         Gets `AttachmentType` objects
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: integer        
       responses:
         200:
           description: Sends list of attachment_types
@@ -478,6 +499,16 @@ paths:
       - Customer
       description: |
         Gets `Customer` objects
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: integer
       responses:
         200:
           description: Sends list of customers
@@ -588,6 +619,15 @@ paths:
         required: true
         schema:
           type: integer
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: limit
+        schema:
+          type: integer          
       responses:
         200:
           description: Sends list of a customer's facilities
@@ -716,6 +756,16 @@ paths:
       - CustomerState
       description: |
         Gets `CustomerState` objects
+      parameters:
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: limit
+        schema:
+          type: integer        
       responses:
         200:
           description: Sends list of customer_states
@@ -819,6 +869,16 @@ paths:
       - Employee
       description: |
         Gets `Employee` objects
+      parameters:
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: limit
+        schema:
+          type: integer           
       responses:
         200:
           description: Sends list of employees
@@ -922,6 +982,16 @@ paths:
       - Event
       description: |
         Gets `Event` objects
+      parameters:
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: limit
+        schema:
+          type: integer        
       responses:
         200:
           description: Sends list of events
@@ -1025,6 +1095,16 @@ paths:
       - Invoice
       description: |
         Gets `Invoice` objects
+      parameters:
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: limit
+        schema:
+          type: integer        
       responses:
         200:
           description: Sends list of invoices
@@ -1169,6 +1249,16 @@ paths:
       - ItemOrder
       description: |
         Gets `ItemOrder` objects
+      parameters:
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: limit
+        schema:
+          type: integer        
       responses:
         200:
           description: Sends list of item_orders
@@ -1292,6 +1382,16 @@ paths:
       - Item
       description: |
         Gets `Item` objects
+      parameters:
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: limit
+        schema:
+          type: integer        
       responses:
         200:
           description: Sends list of items
@@ -1395,6 +1495,16 @@ paths:
       - ItemCategory
       description: |
         Gets `ItemCategory` objects
+      parameters:
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: limit
+        schema:
+          type: integer        
       responses:
         200:
           description: Sends list of item_categories
@@ -1534,6 +1644,16 @@ paths:
       - Offer
       description: |
         Gets `Offer` objects
+      parameters:
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: limit
+        schema:
+          type: integer        
       responses:
         200:
           description: Sends list of offers
