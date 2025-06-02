@@ -396,6 +396,7 @@ paths:
           name: limit
           schema:
             type: integer        
+          description: The numbers of items to return
       responses:
         200:
           description: Sends list of attachment_types
@@ -509,6 +510,7 @@ paths:
           name: limit
           schema:
             type: integer
+          description: The numbers of items to return
       responses:
         200:
           description: Sends list of customers
@@ -628,6 +630,7 @@ paths:
         name: limit
         schema:
           type: integer          
+        description: The numbers of items to return
       responses:
         200:
           description: Sends list of a customer's facilities
@@ -766,6 +769,7 @@ paths:
         name: limit
         schema:
           type: integer        
+        description: The numbers of items to return
       responses:
         200:
           description: Sends list of customer_states
@@ -879,6 +883,7 @@ paths:
         name: limit
         schema:
           type: integer           
+        description: The numbers of items to return
       responses:
         200:
           description: Sends list of employees
@@ -991,7 +996,8 @@ paths:
       - in: query
         name: limit
         schema:
-          type: integer        
+          type: integer       
+        description: The numbers of items to return
       responses:
         200:
           description: Sends list of events
@@ -1105,6 +1111,7 @@ paths:
         name: limit
         schema:
           type: integer        
+        description: The numbers of items to return
       responses:
         200:
           description: Sends list of invoices
@@ -1259,6 +1266,7 @@ paths:
         name: limit
         schema:
           type: integer        
+        description: The numbers of items to return
       responses:
         200:
           description: Sends list of item_orders
@@ -1392,6 +1400,7 @@ paths:
         name: limit
         schema:
           type: integer        
+        description: The numbers of items to return
       responses:
         200:
           description: Sends list of items
@@ -1505,6 +1514,7 @@ paths:
         name: limit
         schema:
           type: integer        
+        description: The numbers of items to return
       responses:
         200:
           description: Sends list of item_categories
@@ -1654,6 +1664,7 @@ paths:
         name: limit
         schema:
           type: integer        
+        description: The numbers of items to return
       responses:
         200:
           description: Sends list of offers
