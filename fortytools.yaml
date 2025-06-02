@@ -192,7 +192,7 @@ paths:
           name: limit
           schema:
             type: integer
-      description: The numbers of items to return      
+          description: The numbers of items to return
       responses:
         200:
           description: Sends list of accounts
