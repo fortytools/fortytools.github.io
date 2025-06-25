@@ -1787,7 +1787,9 @@ paths:
       tags:
       - ProjectAssignment
       description: |
-        List ProjectAssignments in a given period
+        List ProjectAssignments in a given period.
+        Note: The `date` parameter may only be used if neither `from` nor `to` is provided. If either `from` or `to` is present, the `date` parameter must be omitted.
+        Additionally, if the `date` parameter is not used, the `staff_member_id` parameter is required. If `date` is provided, `staff_member_id` is optional.
       parameters:
       - name: staff_member_id
         in: query
@@ -2354,7 +2356,8 @@ paths:
       tags:
       - ProjectAssignment
       description: |
-        List ProjectAssignments for a StaffMember in a given period
+        List ProjectAssignments for a StaffMember in a given period.
+        Note: The `date` parameter may only be used if neither `from` nor `to` is provided. If either `from` or `to` is present, the `date` parameter must be omitted.
       parameters:
       - name: staff_member_id
         in: path
