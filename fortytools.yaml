@@ -1793,28 +1793,24 @@ paths:
       parameters:
       - name: staff_member_id
         in: query
-        description: ID of the staff_member. Required if from and to are given.
-        required: false
+        description: ID of the staff_member. Required if `from` and `to` are provided.
         schema:
           type: integer
       - name: from
         in: query
-        description: first date of period. Not allowed if date if given.
-        required: true
+        description: first date of period. Required if `date` is not provided; must not be set if `date` is given.
         schema:
           type: string
           format: date
       - name: to
         in: query
-        description: last date of period. Not allowed if date is given.
-        required: true
+        description: last date of period.  Required if `date` is not provided; must not be set if `date` is given.
         schema:
           type: string
           format: date
       - name: date
         in: query
-        description: date of period. Not allowed if from and to are given.
-        required: true
+        description: date of period. Must not be set if `from` and `to` are provided.
         schema:
           type: string
           format: string
@@ -2367,22 +2363,19 @@ paths:
           type: integer
       - name: from
         in: query
-        description: first date of period. Not allowed if date if given.
-        required: true
+        description: first date of period. Required if `date` is not provided; must not be set if `date` is given.
         schema:
           type: string
           format: date
       - name: to
         in: query
-        description: last date of period. Not allowed if date is given.
-        required: true
+        description: last date of period. Required if `date` is not provided; must not be set if `date` is given.
         schema:
           type: string
           format: date
       - name: date
         in: query
-        description: date of period. Not allowed if from and to are given.
-        required: true
+        description: date of period. Must not be set if `from` and `to` are provided.
         schema:
           type: string
           format: string
