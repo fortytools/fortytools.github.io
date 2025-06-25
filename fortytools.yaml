@@ -1782,6 +1782,51 @@ paths:
         422:
           description: Offer could not be printed
           content: {}
+  /project_assignments:
+    get:
+      tags:
+      - ProjectAssignment
+      description: |
+        List ProjectAssignments in a given period
+      parameters:
+      - name: staff_member_id
+        in: query
+        description: ID of the staff_member. Required if from and to are given.
+        required: false
+        schema:
+          type: integer
+      - name: from
+        in: query
+        description: first date of period. Not allowed if date if given.
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: to
+        in: query
+        description: last date of period. Not allowed if date is given.
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: date
+        in: query
+        description: date of period. Not allowed if from and to are given.
+        required: true
+        schema:
+          type: string
+          format: string
+      responses:
+        200:
+          description: Sends the project_assignments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectAssignment'
+        400:
+          description: Bad request - probably from and/or to params are missing
   /purchases:
     get:
       tags:
@@ -2319,18 +2364,25 @@ paths:
           type: integer
       - name: from
         in: query
-        description: first date of period
+        description: first date of period. Not allowed if date if given.
         required: true
         schema:
           type: string
           format: date
       - name: to
         in: query
-        description: last date of period
+        description: last date of period. Not allowed if date is given.
         required: true
         schema:
           type: string
           format: date
+      - name: date
+        in: query
+        description: date of period. Not allowed if from and to are given.
+        required: true
+        schema:
+          type: string
+          format: string
       responses:
         200:
           description: Sends the project_assignments
