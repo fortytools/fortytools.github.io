@@ -1782,6 +1782,49 @@ paths:
         422:
           description: Offer could not be printed
           content: {}
+  /project_assignments:
+    get:
+      tags:
+      - ProjectAssignment
+      description: |
+        List ProjectAssignments in a given period.
+        Note: The `date` parameter may only be used if neither `from` nor `to` is provided. If either `from` or `to` is present, the `date` parameter must be omitted.
+        Additionally, if the `date` parameter is not used, the `staff_member_id` parameter is required. If `date` is provided, `staff_member_id` is optional.
+      parameters:
+      - name: staff_member_id
+        in: query
+        description: ID of the staff_member. Required if `from` and `to` are provided.
+        schema:
+          type: integer
+      - name: from
+        in: query
+        description: first date of period. Required if `date` is not provided; must not be set if `date` is given.
+        schema:
+          type: string
+          format: date
+      - name: to
+        in: query
+        description: last date of period.  Required if `date` is not provided; must not be set if `date` is given.
+        schema:
+          type: string
+          format: date
+      - name: date
+        in: query
+        description: date of period. Must not be set if `from` and `to` are provided.
+        schema:
+          type: string
+          format: string
+      responses:
+        200:
+          description: Sends the project_assignments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectAssignment'
+        400:
+          description: Bad request - probably from and/or to params are missing
   /purchases:
     get:
       tags:
@@ -2309,7 +2352,8 @@ paths:
       tags:
       - ProjectAssignment
       description: |
-        List ProjectAssignments for a StaffMember in a given period
+        List ProjectAssignments for a StaffMember in a given period.
+        Note: The `date` parameter may only be used if neither `from` nor `to` is provided. If either `from` or `to` is present, the `date` parameter must be omitted.
       parameters:
       - name: staff_member_id
         in: path
@@ -2319,18 +2363,22 @@ paths:
           type: integer
       - name: from
         in: query
-        description: first date of period
-        required: true
+        description: first date of period. Required if `date` is not provided; must not be set if `date` is given.
         schema:
           type: string
           format: date
       - name: to
         in: query
-        description: last date of period
-        required: true
+        description: last date of period. Required if `date` is not provided; must not be set if `date` is given.
         schema:
           type: string
           format: date
+      - name: date
+        in: query
+        description: date of period. Must not be set if `from` and `to` are provided.
+        schema:
+          type: string
+          format: string
       responses:
         200:
           description: Sends the project_assignments
