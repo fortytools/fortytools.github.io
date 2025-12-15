@@ -241,9 +241,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Account'
+                $ref: '#/components/schemas/Account'
     delete:
       tags:
       - Account
@@ -331,9 +329,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Attachment'
+                $ref: '#/components/schemas/Attachment'
     delete:
       tags:
       - Attachment
@@ -445,9 +441,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/AttachmentType'
+                $ref: '#/components/schemas/AttachmentType'
     delete:
       tags:
       - AttachmentType
@@ -559,9 +553,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Customer'
+                $ref: '#/components/schemas/Customer'
     delete:
       tags:
       - Customer
@@ -692,9 +684,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Facility'
+                $ref: '#/components/schemas/Facility'
     delete:
       tags:
       - Facility
@@ -818,9 +808,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/CustomerState'
+                $ref: '#/components/schemas/CustomerState'
     delete:
       tags:
       - CustomerState
@@ -932,9 +920,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Employee'
+                $ref: '#/components/schemas/Employee'
     delete:
       tags:
       - Employee
@@ -1046,9 +1032,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Event'
+                $ref: '#/components/schemas/Event'
     delete:
       tags:
       - Event
@@ -1160,9 +1144,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Invoice'
+                $ref: '#/components/schemas/Invoice'
     delete:
       tags:
       - Invoice
@@ -1315,9 +1297,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/ItemOrder'
+                $ref: '#/components/schemas/ItemOrder'
     delete:
       tags:
       - ItemOrder
@@ -1449,9 +1429,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Item'
+                $ref: '#/components/schemas/Item'
     delete:
       tags:
       - Item
@@ -1563,9 +1541,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/ItemCategory'
+                $ref: '#/components/schemas/ItemCategory'
     delete:
       tags:
       - ItemCategory
@@ -1713,9 +1689,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Offer'
+                $ref: '#/components/schemas/Offer'
     delete:
       tags:
       - Offer
@@ -1993,9 +1967,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/ServiceType'
+                $ref: '#/components/schemas/ServiceType'
     delete:
       tags:
       - ServiceType
@@ -2096,9 +2068,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Sponsor'
+                $ref: '#/components/schemas/Sponsor'
     delete:
       tags:
       - Sponsor
@@ -2199,9 +2169,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/StaffMember'
+                $ref: '#/components/schemas/StaffMember'
   /staff_members/{staff_member_id}/bookings:
     get:
       tags:
@@ -2289,9 +2257,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Booking'
+                $ref: '#/components/schemas/Booking'
     patch:
       tags:
       - Booking
@@ -2415,9 +2381,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/ProjectAssignment'
+                $ref: '#/components/schemas/ProjectAssignment'
   /suppliers:
     get:
       tags:
@@ -2472,9 +2436,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Supplier'
+                $ref: '#/components/schemas/Supplier'
     delete:
       tags:
       - Supplier
@@ -2575,9 +2537,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Task'
+                $ref: '#/components/schemas/Task'
     delete:
       tags:
       - Task
@@ -2678,9 +2638,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Unit'
+                $ref: '#/components/schemas/Unit'
     delete:
       tags:
       - Unit
@@ -2781,9 +2739,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Unit'
+                $ref: '#/components/schemas/Unit'
     delete:
       tags:
       - WebHook
@@ -3471,10 +3427,10 @@ components:
           type: string
           description: Information/notes about this staff member
         tax_number:
-          type: String
+          type: string
           description: The staff members tax number
         insurance_number:
-          type: String
+          type: string
           description: The staff members insurance number (Sozialversicherungsnummer in Germany)
     Supplier:
       type: object
