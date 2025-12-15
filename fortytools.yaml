@@ -3416,6 +3416,24 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Position'
+    SearchEntry:
+      type: object
+      properties:
+        id:
+          description: Unique ID of the search entry
+          type: integer
+        searchable_type:
+          description: "The type of the entity belonging to the search entry, e.g. 'Customer' or 'StaffMember'"
+          type: string
+        searchable_id:
+          description: The unique ID of the actual entity represented by this search entry
+          type: integer
+        preview_primary:
+          description: The primary preview text for the search entry, can be used to show an abbreviated form of the entity.
+          type: string
+        preview_secondary:
+          description: An additional preview text for the search entry, contains some more information of the entity.
+          type: string
     ServiceType:
       type: object
       properties:
