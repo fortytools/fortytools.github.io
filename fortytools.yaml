@@ -1,16 +1,15 @@
 openapi: 3.0.1
 
 info:
-  title: Fortytools Web API
+  title: Fortytools API
   description: |
     API for https://www.fortytools.com
   termsOfService: https://www.fortytools.com/nutzungsbedingungen
   contact:
     email: support@fortytools.com
-  version: 2.2.2
+  version: 2.2.3
 
 servers:
-- url: https://skyline.fortytools.com/api/v2
 - url: https://app.fortytools.com/api/v2
 
 security:
@@ -57,6 +56,8 @@ tags:
   description: ProjectAssignment methods
 - name: Purchase
   description: Purchase methods
+- name: Search
+  description: Search methods  
 - name: ServiceType
   description: ServiceType methods
 - name: Sponsor
@@ -1939,6 +1940,33 @@ paths:
     #       description: Purchase update failed
     #       content: {}
     #   x-codegen-request-body-name: purchase
+  /search/global:
+    get:
+      tags:
+      - Search
+      description: |
+        Search for entities of different types.
+    parameters:
+      - name: q
+        in: query
+        description: The search term
+        required: true
+        schema:
+          type: string
+      - name: types
+        in: query
+        description: "List of types to restrict search to, e.g. 'Customer' to only search for customers or 'Customer,StaffMember' to search for customers and staff members."
+        schema:
+          type: string
+    responses:
+      200:
+        description: Sends a list of search results
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SearchEntry'
   /service_types:
     get:
       tags:
