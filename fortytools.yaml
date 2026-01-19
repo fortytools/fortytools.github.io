@@ -2719,6 +2719,16 @@ paths:
       - Upload
       description: |
         Upload binary data that can be later on be associated to different entities.
+      requestBody:
+        description: The binary data you want to upload
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
       responses:
         204:
           description: Upload was successful
@@ -3556,11 +3566,6 @@ components:
           type: boolean
           description: Unit declares a flatrate - when the unit is used in an invoice
             line item, the count value can not be changed but defaults to 1.
-    Upload:
-      type: object
-      properties:
-        file:
-          type: Binary data
     WebHook:
       type: object
       properties:
