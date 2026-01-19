@@ -71,7 +71,7 @@ tags:
 - name: Unit
   description: Unit methods
 - name: Upload
-  description: Upload methods
+  description: File uploads
 - name: WebHook
   description: WebHook methods
 
@@ -297,7 +297,7 @@ paths:
       description: |
         Create a new `Attachment`
       requestBody:
-        description: The attachment JSON you want to post
+        description: The attachment JSON you want to post. Use a UUID retrieved from the /uploads endpoint to reference some binary data here in the `upload` attribute.
         content:
           application/json:
             schema:
@@ -2713,6 +2713,23 @@ paths:
           description: Unit update failed
           content: {}
       x-codegen-request-body-name: unit
+  /uploads:
+    post:
+      tags:
+      - Upload
+      description: |
+        Upload binary data that can be later on be associated to different entities.
+      responses:
+        204:
+          description: Upload was successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    description: A UUID that can be used to reference this upload in subsequent operations.                  
   /web_hooks:
     get:
       tags:
@@ -3539,6 +3556,11 @@ components:
           type: boolean
           description: Unit declares a flatrate - when the unit is used in an invoice
             line item, the count value can not be changed but defaults to 1.
+    Upload:
+      type: object
+      properties:
+        file:
+          type: Binary data
     WebHook:
       type: object
       properties:
