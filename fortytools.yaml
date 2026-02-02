@@ -52,8 +52,8 @@ tags:
   description: Oauth methods
 - name: Offer
   description: Offer methods
-- name: ProjectAssignment
-  description: ProjectAssignment methods
+- name: Appointment
+  description: Appointment methods
 - name: Purchase
   description: Purchase methods
 - name: Search
@@ -290,6 +290,49 @@ paths:
           description: Account update failed
           content: {}
       x-codegen-request-body-name: account
+  /appointments:
+    get:
+      tags:
+      - Appointment
+      description: |
+        List Appointments in a given period.
+        Note: The `date` parameter may only be used if neither `from` nor `to` is provided. If either `from` or `to` is present, the `date` parameter must be omitted.
+        Additionally, if the `date` parameter is not used, the `staff_member_id` parameter is required. If `date` is provided, `staff_member_id` is optional.
+      parameters:
+      - name: staff_member_id
+        in: query
+        description: ID of the staff_member. Required if `from` and `to` are provided.
+        schema:
+          type: integer
+      - name: from
+        in: query
+        description: first date of period. Required if `date` is not provided; must not be set if `date` is given.
+        schema:
+          type: string
+          format: date
+      - name: to
+        in: query
+        description: last date of period.  Required if `date` is not provided; must not be set if `date` is given.
+        schema:
+          type: string
+          format: date
+      - name: date
+        in: query
+        description: date of period. Must not be set if `from` and `to` are provided.
+        schema:
+          type: string
+          format: string
+      responses:
+        200:
+          description: Sends the appointments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Appointment'
+        400:
+          description: Bad request - probably from and/or to params are missing
   /attachments:
     post:
       tags:
@@ -1762,6 +1805,7 @@ paths:
       tags:
       - ProjectAssignment
       description: |
+        DEPRECATED Use Appointment instead
         List ProjectAssignments in a given period.
         Note: The `date` parameter may only be used if neither `from` nor `to` is provided. If either `from` or `to` is present, the `date` parameter must be omitted.
         Additionally, if the `date` parameter is not used, the `staff_member_id` parameter is required. If `date` is provided, `staff_member_id` is optional.
@@ -2341,12 +2385,12 @@ paths:
         405:
           description: Booking could not be destroyed
           content: {}
-  /staff_members/{staff_member_id}/project_assignments:
+  /staff_members/{staff_member_id}/appointments:
     get:
       tags:
-      - ProjectAssignment
+      - Appointment
       description: |
-        List ProjectAssignments for a StaffMember in a given period.
+        List Appointments for a StaffMember in a given period.
         Note: The `date` parameter may only be used if neither `from` nor `to` is provided. If either `from` or `to` is present, the `date` parameter must be omitted.
       parameters:
       - name: staff_member_id
@@ -2375,21 +2419,21 @@ paths:
           format: string
       responses:
         200:
-          description: Sends the project_assignments
+          description: Sends the appointments
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProjectAssignment'
+                  $ref: '#/components/schemas/Appointment'
         400:
           description: Bad request - probably from and/or to params are missing
-  /staff_members/{staff_member_id}/project_assignments/{project_assignment_id}:
+  /staff_members/{staff_member_id}/appointments/{appointment_id}:
     get:
       tags:
-      - ProjectAssignment
+      - Appointment
       description: |
-        Display data of a ProjectAssignment
+        Display data of aan Appointment
       parameters:
       - name: staff_member_id
         in: path
@@ -2399,17 +2443,17 @@ paths:
           type: integer
       - name: project_assignment_id
         in: path
-        description: ID of the project_assignment
+        description: ID of the appointment
         required: true
         schema:
           type: string
       responses:
         200:
-          description: Sends the project_assignment
+          description: Sends the appointment
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectAssignment'
+                $ref: '#/components/schemas/Appointment'
   /suppliers:
     get:
       tags:
@@ -3299,7 +3343,7 @@ components:
           type: boolean
           description: line item's total price is not added to the total price of
             the offer
-    ProjectAssignment:
+    Appointment:
       type: object
       properties:
         starts_at:
