@@ -1803,7 +1803,7 @@ paths:
   /project_assignments:
     get:
       tags:
-      - ProjectAssignment
+      - Appointment
       description: |
         DEPRECATED Use Appointment instead
         List ProjectAssignments in a given period.
@@ -1841,7 +1841,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProjectAssignment'
+                  $ref: '#/components/schemas/Appointment'
         400:
           description: Bad request - probably from and/or to params are missing
   /purchases:
