@@ -987,8 +987,7 @@ paths:
     patch:
       tags:
       - Employee
-      description: |
-        Update a `Employee`
+      summary: Update a `Employee`
       parameters:
       - name: employee_id
         in: path
@@ -1040,8 +1039,7 @@ paths:
     post:
       tags:
       - Event
-      description: |
-        Create a new `Event`
+      summary: Create a new `Event`
       requestBody:
         description: The event JSON you want to post
         content:
@@ -1061,8 +1059,7 @@ paths:
     get:
       tags:
       - Event
-      description: |
-        Display data of an `Event`
+      summary: Display data of an `Event`
       parameters:
       - name: event_id
         in: path
@@ -1080,8 +1077,7 @@ paths:
     delete:
       tags:
       - Event
-      description: |
-        Delete a `Event`
+      summary: Delete a `Event`
       parameters:
       - name: event_id
         in: path
@@ -1099,8 +1095,7 @@ paths:
     patch:
       tags:
       - Event
-      description: |
-        Update a `Event`
+      summary: Update a `Event`
       parameters:
       - name: event_id
         in: path
@@ -1127,8 +1122,7 @@ paths:
     get:
       tags:
       - Invoice
-      description: |
-        Gets `Invoice` objects
+      summary: Gets `Invoice` objects
       parameters:
       - in: query
         name: offset
@@ -1152,8 +1146,7 @@ paths:
     post:
       tags:
       - Invoice
-      description: |
-        Create a new `Invoice`
+      summary: Create a new `Invoice`
       requestBody:
         description: The invoice JSON you want to post
         content:
@@ -1173,8 +1166,7 @@ paths:
     get:
       tags:
       - Invoice
-      description: |
-        Display data of an `Invoice`
+      summary: Display data of an `Invoice`
       parameters:
       - name: invoice_id
         in: path
@@ -1192,8 +1184,7 @@ paths:
     delete:
       tags:
       - Invoice
-      description: |
-        Delete a `Invoice`
+      summary: Delete a `Invoice`
       parameters:
       - name: invoice_id
         in: path
@@ -1211,8 +1202,7 @@ paths:
     patch:
       tags:
       - Invoice
-      description: |
-        Update a `Invoice`
+      summary: Update a `Invoice`
       parameters:
       - name: invoice_id
         in: path
@@ -1305,8 +1295,7 @@ paths:
     post:
       tags:
       - ItemOrder
-      description: |
-        Create a new `ItemOrder`
+      summary: Create a new `ItemOrder`
       requestBody:
         description: The item_order JSON you want to post
         content:
@@ -1326,8 +1315,7 @@ paths:
     get:
       tags:
       - ItemOrder
-      description: |
-        Display data of an `ItemOrder`
+      summary: Display data of an `ItemOrder`
       parameters:
       - name: item_order_id
         in: path
@@ -1364,8 +1352,7 @@ paths:
     patch:
       tags:
       - ItemOrder
-      description: |
-        Update a `ItemOrder`
+      summary: Update a `ItemOrder`
       parameters:
       - name: item_order_id
         in: path
@@ -1392,8 +1379,9 @@ paths:
     post:
       tags:
       - ItemOrder
+      summary: Print an `ItemOrder`
       description: |
-        Print an `ItemOrder` (meaning that a number is automatically assigned and the final ItemOrder pdf is generated)
+        A a number is automatically assigned and the final ItemOrder pdf is generated.
       parameters:
       - name: item_order_id
         in: path
@@ -1412,8 +1400,7 @@ paths:
     get:
       tags:
       - Item
-      description: |
-        Gets `Item` objects
+      summary: Gets `Item` objects
       parameters:
       - in: query
         name: offset
@@ -1437,8 +1424,7 @@ paths:
     post:
       tags:
       - Item
-      description: |
-        Create a new `Item`
+      summary: Create a new `Item`
       requestBody:
         description: The item JSON you want to post
         content:
@@ -1458,8 +1444,7 @@ paths:
     get:
       tags:
       - Item
-      description: |
-        Display data of an `Item`
+      summary: Display data of an `Item`
       parameters:
       - name: item_id
         in: path
@@ -1477,8 +1462,7 @@ paths:
     delete:
       tags:
       - Item
-      description: |
-        Delete a `Item`
+      summary: Delete a `Item`
       parameters:
       - name: item_id
         in: path
@@ -1496,8 +1480,7 @@ paths:
     patch:
       tags:
       - Item
-      description: |
-        Update a `Item`
+      summary: Update a `Item`
       parameters:
       - name: item_id
         in: path
@@ -1524,8 +1507,7 @@ paths:
     get:
       tags:
       - ItemCategory
-      description: |
-        Gets `ItemCategory` objects
+      summary: Gets `ItemCategory` objects
       parameters:
       - in: query
         name: offset
@@ -1549,8 +1531,7 @@ paths:
     post:
       tags:
       - ItemCategory
-      description: |
-        Create a new `ItemCategory`
+      summary: Create a new `ItemCategory`
       requestBody:
         description: The item_category JSON you want to post
         content:
@@ -1570,8 +1551,7 @@ paths:
     get:
       tags:
       - ItemCategory
-      description: |
-        Display data of an `ItemCategory`
+      summary: Display data of an `ItemCategory`
       parameters:
       - name: item_category_id
         in: path
@@ -1589,8 +1569,7 @@ paths:
     delete:
       tags:
       - ItemCategory
-      description: |
-        Delete a `ItemCategory`
+      summary: Delete a `ItemCategory`
       parameters:
       - name: item_category_id
         in: path
@@ -1608,8 +1587,7 @@ paths:
     patch:
       tags:
       - ItemCategory
-      description: |
-        Update a `ItemCategory`
+      summary: Update a `ItemCategory`
       parameters:
       - name: item_category_id
         in: path
@@ -1962,6 +1940,7 @@ paths:
     get:
       tags:
       - Search
+      summary: Global search
       description: |
         Search for entities of different types.
     parameters:
@@ -2389,8 +2368,8 @@ paths:
     get:
       tags:
       - Appointment
+      summary: List Appointments for a StaffMember in a given period
       description: |
-        List Appointments for a StaffMember in a given period.
         Note: The `date` parameter may only be used if neither `from` nor `to` is provided. If either `from` or `to` is present, the `date` parameter must be omitted.
       parameters:
       - name: staff_member_id
@@ -2632,8 +2611,7 @@ paths:
     patch:
       tags:
       - Task
-      description: |
-        Update a `Task`
+      summary: Update a `Task`
       parameters:
       - name: task_id
         in: path
@@ -2660,8 +2638,7 @@ paths:
     get:
       tags:
       - Unit
-      description: |
-        Gets `Unit` objects
+      summary: Gets `Unit` objects
       responses:
         200:
           description: Sends list of units
@@ -2674,8 +2651,7 @@ paths:
     post:
       tags:
       - Unit
-      description: |
-        Create a new `Unit`
+      summary: Create a new `Unit`
       requestBody:
         description: The unit JSON you want to post
         content:
@@ -2695,8 +2671,7 @@ paths:
     get:
       tags:
       - Unit
-      description: |
-        Display data of an `Unit`
+      summary: Display data of an `Unit`
       parameters:
       - name: unit_id
         in: path
@@ -2714,8 +2689,7 @@ paths:
     delete:
       tags:
       - Unit
-      description: |
-        Delete a `Unit`
+      summary: Delete a `Unit`
       parameters:
       - name: unit_id
         in: path
@@ -2733,8 +2707,7 @@ paths:
     patch:
       tags:
       - Unit
-      description: |
-        Update a `Unit`
+      summary: Update a `Unit`
       parameters:
       - name: unit_id
         in: path
@@ -2761,8 +2734,9 @@ paths:
     post:
       tags:
       - Upload
+      summary: Upload binary data
       description: |
-        Upload binary data that can be later on be associated to different entities.
+        Use response UUID to later associate this data with certain entities. See `Attachment` for example.
       requestBody:
         description: The binary data you want to upload
         content:
