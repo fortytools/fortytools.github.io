@@ -1804,9 +1804,9 @@ paths:
     get:
       tags:
       - Appointment
+      summary: List ProjectAssignments in a given period
       description: |
         DEPRECATED Use Appointment instead
-        List ProjectAssignments in a given period.
         Note: The `date` parameter may only be used if neither `from` nor `to` is provided. If either `from` or `to` is present, the `date` parameter must be omitted.
         Additionally, if the `date` parameter is not used, the `staff_member_id` parameter is required. If `date` is provided, `staff_member_id` is optional.
       parameters:
@@ -2441,7 +2441,7 @@ paths:
         required: true
         schema:
           type: integer
-      - name: project_assignment_id
+      - name: appointment_id
         in: path
         description: ID of the appointment
         required: true
@@ -2941,7 +2941,7 @@ components:
           type: integer
         text:
           type: string
-        project_assignment_id:
+        appointment_id:
           type: string
         sales_regime_id:
           type: integer
