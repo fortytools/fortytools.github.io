@@ -294,8 +294,8 @@ paths:
     get:
       tags:
       - Appointment
+      summary: List Appointments in a given period
       description: |
-        List Appointments in a given period.
         Note: The `date` parameter may only be used if neither `from` nor `to` is provided. If either `from` or `to` is present, the `date` parameter must be omitted.
         Additionally, if the `date` parameter is not used, the `staff_member_id` parameter is required. If `date` is provided, `staff_member_id` is optional.
       parameters:
@@ -1806,7 +1806,7 @@ paths:
       - Appointment
       summary: List ProjectAssignments in a given period
       description: |
-        DEPRECATED Use Appointment instead
+        **DEPRECATED** Use Appointment instead!
         Note: The `date` parameter may only be used if neither `from` nor `to` is provided. If either `from` or `to` is present, the `date` parameter must be omitted.
         Additionally, if the `date` parameter is not used, the `staff_member_id` parameter is required. If `date` is provided, `staff_member_id` is optional.
       parameters:
