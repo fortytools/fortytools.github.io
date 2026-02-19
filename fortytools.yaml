@@ -2897,7 +2897,7 @@ components:
           type: string
         download_url:
           type: string
-          description: a direct link to the attached contet valid for 10 minutes
+          description: a direct link to the attached file valid for 10 minutes
     AttachmentType:
       type: object
       properties:
