@@ -2895,6 +2895,9 @@ components:
           type: integer
         upload:
           type: string
+        download_url:
+          type: string
+          description: a direct link to the attached contet valid for 10 minutes
     AttachmentType:
       type: object
       properties:
@@ -3139,6 +3142,9 @@ components:
         notepaper_id:
           type: integer
           description: references the notepaper (pdf background)
+        download_url:
+          type: string
+          description: a direct link to the invoice valid for 10 minutes
     InvoiceLineItem:
       type: object
       properties:
