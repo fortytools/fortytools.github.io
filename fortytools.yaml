@@ -20,6 +20,10 @@ security:
 - oauth: []
 
 tags:
+- name: Absence
+  description: Absence methods
+- name: AbsenceType
+  description: AbsenceType methods
 - name: Account
   description: Accounts as in Accounting
 - name: Attachment
@@ -177,6 +181,253 @@ paths:
           description: Invalid credentials, there is no User with this token.
         403:
           description: Valid Credentials, but the user is not active or hasn't firebase access enabled
+  /absences:
+    get:
+      tags:
+      - Absence
+      summary: List Absences in a given period
+      description: |
+        Gets `Absence` objects within a date range. Both `from` and `to` are required.
+        Optionally filter by `staff_member_id`.
+      parameters:
+      - name: from
+        in: query
+        description: Start date of period (YYYY-MM-DD). Required.
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: to
+        in: query
+        description: End date of period (YYYY-MM-DD). Required.
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: staff_member_id
+        in: query
+        description: Filter by staff member ID
+        schema:
+          type: integer
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: limit
+        schema:
+          type: integer
+        description: The numbers of items to return
+      responses:
+        200:
+          description: Sends list of absences
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Absence'
+        400:
+          description: Bad request - from and/or to params are missing or invalid
+    post:
+      tags:
+      - Absence
+      description: |
+        Create a new `Absence`
+      requestBody:
+        description: The absence JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AbsenceWrite'
+        required: true
+      responses:
+        201:
+          description: Absence was created successfully
+          content: {}
+        422:
+          description: Absence creation failed
+          content: {}
+      x-codegen-request-body-name: absence
+  /absences/{absence_id}:
+    get:
+      tags:
+      - Absence
+      description: |
+        Display data of an `Absence`
+      parameters:
+      - name: absence_id
+        in: path
+        description: ID of the absence
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Sends the absence
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Absence'
+    delete:
+      tags:
+      - Absence
+      description: |
+        Delete an `Absence`
+      parameters:
+      - name: absence_id
+        in: path
+        description: ID of the absence
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Absence was destroyed successfully
+          content: {}
+        405:
+          description: Absence could not be deleted, for example because it was already accounted
+          content: {}
+    patch:
+      tags:
+      - Absence
+      description: |
+        Update an `Absence`
+      parameters:
+      - name: absence_id
+        in: path
+        description: ID of the absence
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The absence JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AbsenceWrite'
+        required: true
+      responses:
+        204:
+          description: Absence was updated successfully
+          content: {}
+        422:
+          description: Absence update failed
+          content: {}
+      x-codegen-request-body-name: absence
+  /absence_types:
+    get:
+      tags:
+      - AbsenceType
+      description: |
+        Gets `AbsenceType` objects
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+      responses:
+        200:
+          description: Sends list of absence types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AbsenceType'
+    post:
+      tags:
+      - AbsenceType
+      description: |
+        Create a new `AbsenceType`
+      requestBody:
+        description: The absence type JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AbsenceType'
+        required: true
+      responses:
+        201:
+          description: AbsenceType was created successfully
+          content: {}
+        422:
+          description: AbsenceType creation failed
+          content: {}
+      x-codegen-request-body-name: absence_type
+  /absence_types/{absence_type_id}:
+    get:
+      tags:
+      - AbsenceType
+      description: |
+        Display data of an `AbsenceType`
+      parameters:
+      - name: absence_type_id
+        in: path
+        description: ID of the absence type
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Sends the absence type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbsenceType'
+    delete:
+      tags:
+      - AbsenceType
+      description: |
+        Delete an `AbsenceType`
+      parameters:
+      - name: absence_type_id
+        in: path
+        description: ID of the absence type
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: AbsenceType was destroyed successfully
+          content: {}
+        405:
+          description: AbsenceType could not be deleted, for example because it still has associated absences
+          content: {}
+    patch:
+      tags:
+      - AbsenceType
+      description: |
+        Update an `AbsenceType`
+      parameters:
+      - name: absence_type_id
+        in: path
+        description: ID of the absence type
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The absence type JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AbsenceType'
+        required: true
+      responses:
+        204:
+          description: AbsenceType was updated successfully
+          content: {}
+        422:
+          description: AbsenceType update failed
+          content: {}
+      x-codegen-request-body-name: absence_type
   /accounts:
     get:
       tags:
@@ -2873,6 +3124,75 @@ components:
           format: seconds
         created_at:
           type: integer
+    Absence:
+      type: object
+      properties:
+        id:
+          type: integer
+        staff_member_id:
+          type: integer
+        absence_type_id:
+          type: integer
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        start_time:
+          type: string
+          description: "HH:MM formatted time, present when duration_type is start_end"
+          example: "09:00"
+        end_time:
+          type: string
+          description: "HH:MM formatted time, present when duration_type is start_end"
+          example: "17:00"
+        daily_hours:
+          type: number
+          format: float
+        duration_type:
+          type: string
+          enum: [daily_hours, start_end, plannings]
+        note:
+          type: string
+        absence_type:
+          $ref: '#/components/schemas/AbsenceType'
+    AbsenceWrite:
+      type: object
+      description: Schema for creating/updating an Absence
+      properties:
+        staff_member_id:
+          type: integer
+        absence_type_id:
+          type: integer
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        daily_hours:
+          type: number
+          format: float
+        duration_type:
+          type: string
+          enum: [daily_hours, start_end, plannings]
+        note:
+          type: string
+    AbsenceType:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        shortname:
+          type: string
+        leave_type:
+          type: string
+          enum: [sick, vacation, public_holiday, other]
+        color:
+          type: string
     Account:
       type: object
       properties:
