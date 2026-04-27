@@ -7,7 +7,7 @@ info:
   termsOfService: https://www.fortytools.com/nutzungsbedingungen
   contact:
     email: support@fortytools.com
-  version: 2.2.3
+  version: 2.3.0
 
 servers:
 - url: https://app.fortytools.com/api/v2
@@ -1413,6 +1413,21 @@ paths:
           description: Invoice creation failed
           content: {}
       x-codegen-request-body-name: invoice
+  /invoices/unpaid:
+    get:
+      tags:
+      - Invoice
+      description: |
+        Gets all unpaid `Invoice` objects
+      responses:
+        200:
+          description: Sends list of unpaid invoices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invoice'
   /invoices/{invoice_id}:
     get:
       tags:
@@ -1498,7 +1513,7 @@ paths:
           description: Invoice cancelation failed
           content: {}
   /invoices/{invoice_id}/print:
-    post:
+    put:
       tags:
       - Invoice
       description: |
@@ -1627,7 +1642,7 @@ paths:
           content: {}
       x-codegen-request-body-name: item_order
   /item_orders/{item_order_id}/print:
-    post:
+    put:
       tags:
       - ItemOrder
       summary: Print an `ItemOrder`
@@ -2010,7 +2025,7 @@ paths:
           content: {}
       x-codegen-request-body-name: offer
   /offers/{offer_id}/print:
-    post:
+    put:
       tags:
       - Offer
       description: |
@@ -2472,7 +2487,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StaffMember'
-  /staff_members/{staff_member_id}/bookings:
+  /bookings:
     get:
       tags:
       - Booking
@@ -2480,7 +2495,7 @@ paths:
         List Bookings for a StaffMember
       parameters:
       - name: staff_member_id
-        in: path
+        in: query
         description: ID of the staff_member
         required: true
         schema:
@@ -2513,13 +2528,6 @@ paths:
       - Booking
       description: |
         Create a new Booking
-      parameters:
-      - name: staff_member_id
-        in: path
-        description: ID of the staff_member
-        required: true
-        schema:
-          type: integer
       requestBody:
         description: The booking JSON you want to post
         content:
@@ -2531,15 +2539,131 @@ paths:
         201:
           description: Booking was created successfully
           content: {}
+        404:
+          description: staff_member_id not found
+          content: {}
         422:
           description: Booking creation failed
           content: {}
-  /staff_members/{staff_member_id}/bookings/{booking_id}:
+  /bookings/{booking_id}:
     get:
       tags:
       - Booking
       description: |
         Display data of a Booking
+      parameters:
+      - name: booking_id
+        in: path
+        description: ID of the booking
+        required: true
+        schema:
+          type: integer
+      - name: staff_member_id
+        in: query
+        description: ID of the staff_member
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Sends the booking
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+    patch:
+      tags:
+      - Booking
+      description: |
+        Update a Booking
+      parameters:
+      - name: booking_id
+        in: path
+        description: ID of the booking
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The booking JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Booking'
+        required: true
+      responses:
+        204:
+          description: Booking was updated successfully
+        422:
+          description: Booking update failed
+    delete:
+      tags:
+      - Booking
+      description: |
+        Delete a Booking
+      parameters:
+      - name: booking_id
+        in: path
+        description: ID of the booking
+        required: true
+        schema:
+          type: integer
+      - name: staff_member_id
+        in: query
+        description: ID of the staff_member
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Booking was destroyed successfully
+          content: {}
+        405:
+          description: Booking could not be destroyed
+          content: {}
+  /staff_members/{staff_member_id}/bookings:
+    get:
+      tags:
+      - Booking
+      description: |
+        List Bookings for a StaffMember. Equivalent to `GET /bookings?staff_member_id={id}`.
+        Note: use `POST /bookings` to create bookings
+      parameters:
+      - name: staff_member_id
+        in: path
+        description: ID of the staff_member
+        required: true
+        schema:
+          type: integer
+      - name: from
+        in: query
+        description: first date of period
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: to
+        in: query
+        description: last date of period
+        required: false
+        schema:
+          type: string
+          format: date
+      responses:
+        200:
+          description: Sends the bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
+  /staff_members/{staff_member_id}/bookings/{booking_id}:
+    get:
+      tags:
+      - Booking
+      description: |
+        Display data of a Booking. Equivalent to `GET /bookings/{booking_id}?staff_member_id={id}`.
+        Note: use `PATCH /bookings/{id}` to update
       parameters:
       - name: staff_member_id
         in: path
@@ -2560,36 +2684,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Booking'
-    patch:
-      tags:
-      - Booking
-      description: |
-        Update a Booking
-      parameters:
-      - name: staff_member_id
-        in: path
-        description: ID of the staff_member
-        required: true
-        schema:
-          type: integer
-      - name: booking_id
-        in: path
-        description: ID of the booking
-        required: true
-        schema:
-          type: integer
-      requestBody:
-        description: The booking JSON you want to post
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Booking'
-        required: true
-      responses:
-        204:
-          description: Booking was updated successfully
-        422:
-          description: Booking update failed
     delete:
       tags:
       - Booking
@@ -2885,6 +2979,36 @@ paths:
           description: Task update failed
           content: {}
       x-codegen-request-body-name: task
+  /tasks/todo:
+    get:
+      tags:
+      - Task
+      description: |
+        Gets all incomplete `Task` objects
+      responses:
+        200:
+          description: Sends list of incomplete tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+  /tasks/done:
+    get:
+      tags:
+      - Task
+      description: |
+        Gets all completed `Task` objects
+      responses:
+        200:
+          description: Sends list of completed tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
   /units:
     get:
       tags:
@@ -3226,6 +3350,9 @@ components:
     Booking:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         starts_at:
           type: string
           format: datetime
@@ -3236,14 +3363,25 @@ components:
           type: integer
         project_id:
           type: integer
+        break_duration:
+          type: integer
+          description: Break duration in seconds
         text:
           type: string
         appointment_id:
-          type: string
+          type: integer
+          description: ID of the project assignment (appointment) this booking was created from
+        project_assignment_id:
+          type: integer
+          deprecated: true
+          description: "Deprecated: use `appointment_id` instead"
         sales_regime_id:
           type: integer
         wage_regime_id:
           type: integer
+        external_id:
+          type: string
+          description: Optional external reference ID
     ClientUser:
       type: object
       properties:
@@ -3266,6 +3404,9 @@ components:
     Customer:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         email:
           type: string
         fax:
@@ -3280,6 +3421,8 @@ components:
           type: string
         last_name:
           type: string
+        is_person:
+          type: boolean
         planning_info:
           type: string
         customer_since:
@@ -3318,6 +3461,8 @@ components:
           type: string
         city:
           type: string
+        city_additional:
+          type: string
         shortinfo:
           type: string
         tag_list:
@@ -3326,16 +3471,28 @@ components:
             type: string
         customer_state_id:
           type: integer
+        client_user_id:
+          type: integer
         project_id:
           type: integer
     CustomerState:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         name:
           type: string
+        hasnumber:
+          type: boolean
+        for_inactive_customers:
+          type: boolean
     Employee:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         first_name:
           type: string
         last_name:
@@ -3352,7 +3509,7 @@ components:
           maximum: 4
           minimum: 1
           type: integer
-        infos:
+        information:
           type: string
         company_id:
           type: integer
@@ -3366,6 +3523,9 @@ components:
     Event:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         title:
           type: string
         body:
@@ -3384,6 +3544,9 @@ components:
     Facility:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         name:
           type: string
         street:
@@ -3392,12 +3555,27 @@ components:
           type: string
         city:
           type: string
+        city_additional:
+          type: string
         bunchofkeys:
+          type: string
+        description:
           type: string
         customer_id:
           type: integer
         project_id:
           type: integer
+          readOnly: true
+        planning_info:
+          type: string
+        latitude:
+          type: number
+        longitude:
+          type: number
+        tag_list:
+          type: array
+          items:
+            type: string
         number:
           type: integer
     FacilityUpdate:
@@ -3411,11 +3589,25 @@ components:
           type: string
         city:
           type: string
+        city_additional:
+          type: string
         bunchofkeys:
+          type: string
+        description:
           type: string
         customer_id:
           type: integer
-        project_id:
+        planning_info:
+          type: string
+        latitude:
+          type: number
+        longitude:
+          type: number
+        tag_list:
+          type: array
+          items:
+            type: string
+        number:
           type: integer
     FirebaseCredential:
       type: object
@@ -3427,6 +3619,9 @@ components:
     Invoice:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         number:
           type: integer
           readOnly: true
@@ -3462,12 +3657,21 @@ components:
         notepaper_id:
           type: integer
           description: references the notepaper (pdf background)
+        net_amount:
+          type: number
+          readOnly: true
+        gross_amount:
+          type: number
+          readOnly: true
         download_url:
           type: string
           description: a direct link to the invoice valid for 10 minutes
     InvoiceLineItem:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         number:
           type: integer
         title:
@@ -3484,9 +3688,6 @@ components:
           type: boolean
         price:
           type: number
-        vat:
-          type: number
-          readOnly: true
         quantity:
           type: number
         unit_id:
@@ -3495,14 +3696,27 @@ components:
           type: integer
         item_id:
           type: integer
+        net_amount:
+          type: number
+          readOnly: true
+        gross_amount:
+          type: number
+          readOnly: true
+        tax_rate:
+          type: number
+          readOnly: true
+          description: VAT rate as a percentage (e.g. 19.0)
     ItemOrder:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         number:
           type: integer
           readOnly: true
         date:
-          type: integer
+          type: string
           format: date
         item_orderable_id:
           type: integer
@@ -3526,8 +3740,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ItemOrderLineItem'
-        delivered:
+        delivered_to_customer:
           type: boolean
+          readOnly: true
+        public_url:
+          type: string
           readOnly: true
         notepaper_id:
           type: integer
@@ -3535,6 +3752,9 @@ components:
     ItemOrderLineItem:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         number:
           type: integer
         title:
@@ -3548,6 +3768,9 @@ components:
     Item:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         number:
           type: integer
         name:
@@ -3568,9 +3791,14 @@ components:
           type: integer
         external_image_url:
           type: string
+        supplier_id:
+          type: integer
     ItemCategory:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         name:
           type: string
         billed_with_service_type_id:
@@ -3578,10 +3806,13 @@ components:
     Offer:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         number:
           type: integer
         date:
-          type: integer
+          type: string
           format: date
         state:
           type: integer
@@ -3603,12 +3834,12 @@ components:
           type: string
         text_before_line_items:
           type: string
+        text_after_line_items:
+          type: string
         line_items:
           type: array
           items:
             $ref: '#/components/schemas/OfferLineItem'
-        text_after_line_items:
-          type: string
         parent_number:
           type: integer
           description: Number (not id!) of an offer that was changed with this offer
@@ -3618,19 +3849,17 @@ components:
     OfferLineItem:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         number:
           type: integer
         title:
           type: string
         details:
           type: string
-        incomplete:
-          type: boolean
         price:
           type: number
-        vat:
-          type: number
-          readOnly: true
         quantity:
           type: number
         unit_id:
@@ -3643,9 +3872,16 @@ components:
           type: boolean
           description: line item's total price is not added to the total price of
             the offer
+        tax_rate:
+          type: number
+          readOnly: true
+          description: VAT rate as a percentage (e.g. 19.0)
     Appointment:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         starts_at:
           type: string
           format: datetime
@@ -3693,12 +3929,14 @@ components:
               url:
                 type: string
                 description: Download url that will expire after some minutes
-        booking_id:
-          type: string
         sales_regime_id:
           type: integer
         wage_regime_id:
           type: integer
+        booking_id:
+          type: integer
+          description: ID of the booking created from this appointment, if any
+          readOnly: true
     Position:
       type: object
       properties:
@@ -3764,6 +4002,9 @@ components:
     ServiceType:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         name:
           type: string
         account_id:
@@ -3776,6 +4017,9 @@ components:
     Sponsor:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         name:
           type: string
         street:
@@ -3803,6 +4047,9 @@ components:
     StaffMember:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         salutation:
           type: string
           description: One of `female`, `male`, `none`
@@ -3849,9 +4096,26 @@ components:
         insurance_number:
           type: string
           description: The staff members insurance number (Sozialversicherungsnummer in Germany)
+        planning_info:
+          type: string
+        weekly_hours:
+          type: number
+        lbnr:
+          type: string
+          description: Special number used in the care industry (Lebenslange Beschäftigtennummer in Germany)
+        staff_tag_list:
+          type: array
+          items:
+            type: string
+        client_user_id:
+          type: integer
+          description: ID of the linked ClientUser account
     Supplier:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         number:
           type: integer
         shortname:
@@ -3863,6 +4127,8 @@ components:
         zip:
           type: string
         city:
+          type: string
+        city_additional:
           type: string
         shortinfo:
           type: string
@@ -3883,6 +4149,9 @@ components:
     Task:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         text:
           type: string
         due_at:
@@ -3904,6 +4173,9 @@ components:
     Unit:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         name:
           type: string
         is_flatrate:
@@ -3913,6 +4185,9 @@ components:
     WebHook:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         model:
           type: string
           description: class of the objects you want to receive WebHooks for, e.g.
