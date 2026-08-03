@@ -2438,6 +2438,17 @@ paths:
       - StaffMember
       description: |
         Gets `StaffMember` objects
+      parameters:
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: limit
+        schema:
+          type: integer
+        description: The numbers of items to return
       responses:
         200:
           description: Sends list of staff_members
@@ -2487,6 +2498,52 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StaffMember'
+    patch:
+      tags:
+      - StaffMember
+      description: |
+        Update a `StaffMember`
+      parameters:
+      - name: staff_member_id
+        in: path
+        description: ID of the staff_member
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The staff member JSON you want to post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StaffMember'
+        required: true
+      responses:
+        204:
+          description: StaffMember was updated successfully
+          content: {}
+        422:
+          description: StaffMember update failed
+          content: {}
+      x-codegen-request-body-name: staff_member
+    delete:
+      tags:
+      - StaffMember
+      description: |
+        Delete a `StaffMember`
+      parameters:
+      - name: staff_member_id
+        in: path
+        description: ID of the staff_member
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: StaffMember was destroyed successfully
+          content: {}
+        405:
+          description: StaffMember could not be deleted
+          content: {}
   /bookings:
     get:
       tags:
@@ -4055,6 +4112,7 @@ components:
           description: One of `female`, `male`, `none`
         number:
           type: integer
+          description: Staff number, has to be unique within the client
         first_name:
           type: string
           description: One or more first names of the staff member
@@ -4100,6 +4158,10 @@ components:
           type: string
         weekly_hours:
           type: number
+          minimum: 0
+          maximum: 99
+          default: 8.0
+          description: Contractually agreed weekly working hours
         lbnr:
           type: string
           description: Special number used in the care industry (Lebenslange Beschäftigtennummer in Germany)
@@ -4109,6 +4171,7 @@ components:
             type: string
         client_user_id:
           type: integer
+          readOnly: true
           description: ID of the linked ClientUser account
     Supplier:
       type: object
