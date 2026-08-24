@@ -555,6 +555,11 @@ paths:
         description: ID of the staff_member. Required if `from` and `to` are provided.
         schema:
           type: integer
+      - name: project_id
+        in: query
+        description: ID of the project. Optional.
+        schema:
+          type: integer
       - name: from
         in: query
         description: first date of period. Required if `date` is not provided; must not be set if `date` is given.
