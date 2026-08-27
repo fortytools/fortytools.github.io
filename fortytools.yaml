@@ -589,6 +589,45 @@ paths:
                   $ref: '#/components/schemas/Appointment'
         400:
           description: Bad request - probably from and/or to params are missing
+  /appointments/{appointment_id}/cancel:
+    post:
+      tags:
+      - Appointment
+      summary: Cancel an Appointment
+      description: |
+        Cancels a scheduled `Appointment`. After cancellation the appointment is
+        still returned by the list endpoints, with `canceled` set to `true`.
+        Only appointments of the requesting client can be cancelled.
+      parameters:
+      - name: appointment_id
+        in: path
+        required: true
+        description: ID of the appointment
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  description: Reason for the cancellation. Defaults to "Canceled via API".
+      responses:
+        200:
+          description: Appointment was cancelled. Sends the appointment with `canceled` set to `true`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Appointment'
+        403:
+          description: Not authorized to cancel appointments
+        404:
+          description: No appointment with this id exists for the requesting client
+        422:
+          description: The appointment is already cancelled
   /attachments:
     post:
       tags:
@@ -3998,6 +4037,10 @@ components:
         booking_id:
           type: integer
           description: ID of the booking created from this appointment, if any
+          readOnly: true
+        canceled:
+          type: boolean
+          description: Whether the appointment has been cancelled
           readOnly: true
     Position:
       type: object
