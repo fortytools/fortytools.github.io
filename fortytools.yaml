@@ -4007,6 +4007,10 @@ components:
           type: integer
           description: ID of the booking created from this appointment, if any
           readOnly: true
+        canceled:
+          type: boolean
+          description: Whether the customer called this appointment off. It is still returned.
+          readOnly: true
     Position:
       type: object
       properties:
