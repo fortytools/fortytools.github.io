@@ -3951,6 +3951,19 @@ components:
           type: string
         staff_member_id:
           type: integer
+        replaces_staff_member_id:
+          type: integer
+          description: >-
+            Set when this staff member temporarily stands in for another one on this appointment.
+            The id of the staff member being replaced.
+          readOnly: true
+        replaced_by_staff_member_id:
+          type: integer
+          description: >-
+            Set when this staff member was temporarily replaced on this appointment. The id of the
+            stand-in working in their place. The appointment is still returned and is wage-relevant,
+            but it is not billed to the customer.
+          readOnly: true
         project_id:
           type: integer
         siblings:
