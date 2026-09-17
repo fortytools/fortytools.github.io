@@ -548,11 +548,16 @@ paths:
       summary: List Appointments in a given period
       description: |
         Note: The `date` parameter may only be used if neither `from` nor `to` is provided. If either `from` or `to` is present, the `date` parameter must be omitted.
-        Additionally, if the `date` parameter is not used, the `staff_member_id` parameter is required. If `date` is provided, `staff_member_id` is optional.
+        Additionally, if the `date` parameter is not used, either `staff_member_id` or `project_id` is required. If `date` is provided, both are optional.
       parameters:
       - name: staff_member_id
         in: query
-        description: ID of the staff_member. Required if `from` and `to` are provided.
+        description: ID of the staff_member. Required if `from` and `to` are provided and `project_id` is not given.
+        schema:
+          type: integer
+      - name: project_id
+        in: query
+        description: ID of the project. Required if `from` and `to` are provided and `staff_member_id` is not given. Can be combined with `staff_member_id`.
         schema:
           type: integer
       - name: from
@@ -2091,11 +2096,16 @@ paths:
       description: |
         **DEPRECATED** Use Appointment instead!
         Note: The `date` parameter may only be used if neither `from` nor `to` is provided. If either `from` or `to` is present, the `date` parameter must be omitted.
-        Additionally, if the `date` parameter is not used, the `staff_member_id` parameter is required. If `date` is provided, `staff_member_id` is optional.
+        Additionally, if the `date` parameter is not used, either `staff_member_id` or `project_id` is required. If `date` is provided, both are optional.
       parameters:
       - name: staff_member_id
         in: query
-        description: ID of the staff_member. Required if `from` and `to` are provided.
+        description: ID of the staff_member. Required if `from` and `to` are provided and `project_id` is not given.
+        schema:
+          type: integer
+      - name: project_id
+        in: query
+        description: ID of the project. Required if `from` and `to` are provided and `staff_member_id` is not given. Can be combined with `staff_member_id`.
         schema:
           type: integer
       - name: from
