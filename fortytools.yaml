@@ -1537,7 +1537,7 @@ paths:
           description: Invoice was updated successfully
           content: {}
         422:
-          description: Invoice update failed
+          description: Invoice update failed, e.g. `paid` was set on a draft
           content: {}
       x-codegen-request-body-name: invoice
   /invoices/{invoice_id}/cancel:
@@ -3765,6 +3765,9 @@ components:
             $ref: '#/components/schemas/InvoiceLineItem'
         paid:
           type: boolean
+          description: |
+            Send `true` or `false` with `PATCH /invoices/{invoice_id}` to mark a printed or accounted invoice as fully
+            paid or unpaid. Marking a draft as paid or sending any other value fails with 422. Ignored on create
         notepaper_id:
           type: integer
           description: references the notepaper (pdf background)
